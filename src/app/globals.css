@@ -1,3 +1,7 @@
+/* Flag icons — real SVG flags instead of Unicode flag emoji, which Windows
+   renders as plain two-letter text instead of a flag glyph. */
+@import "flag-icons/css/flag-icons.min.css";
+
 /* ============================================================
    Fonts — self-hosted, matching study-abroad-matcher's theme.
    Inter Tight for Latin, Anek Bangla for Bangla.

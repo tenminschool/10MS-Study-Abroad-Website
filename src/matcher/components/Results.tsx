@@ -13,6 +13,7 @@ import type {
   Tier,
 } from '../engine/types'
 import { band, money, num } from '../lib/format'
+import { Flag } from './Flag'
 
 const MONEY_PARAMS = new Set(['typical', 'minimum', 'budget', 'upfront', 'tuition'])
 const BAND_PARAMS = new Set(['score', 'required', 'band', 'target'])
@@ -176,9 +177,7 @@ function CountryCard({
   return (
     <article className={`ccard${open ? ' open' : ''}${r.tier === 'unlikely' ? ' dim' : ''}`}>
       <button type="button" className="cc-head" onClick={onToggle} aria-expanded={open}>
-        <span className="row-flag" aria-hidden="true">
-          {d.flag}
-        </span>
+        <Flag emoji={d.flag} className="row-flag" />
         <span className="cc-main">
           <span className="row-name">{d.name[lang]}</span>
           {headline && <span className="row-why">{reasonText(headline)}</span>}

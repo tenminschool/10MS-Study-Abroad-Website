@@ -60,7 +60,7 @@ export function ChipGroup<T extends string>({
 }: {
   value: T[]
   onChange: (v: T[]) => void
-  options: { value: T; label: string }[]
+  options: { value: T; label: ReactNode }[]
   max?: number
 }) {
   const toggle = (v: T) => {

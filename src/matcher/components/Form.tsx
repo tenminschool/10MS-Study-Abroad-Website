@@ -13,6 +13,7 @@ import type {
   StudyLevel,
 } from '../engine/types'
 import { ChipGroup, Field, Select, Toggle } from './ui'
+import { Flag } from './Flag'
 
 export const TOTAL_STEPS = 5
 
@@ -643,7 +644,11 @@ export function Form({
                 (d) => !d.offeredLevels || d.offeredLevels.includes(profile.level ?? 'bachelors'),
               ).map((d) => ({
                 value: d.id,
-                label: `${d.flag} ${d.name[lang]}`,
+                label: (
+                  <>
+                    <Flag emoji={d.flag} /> {d.name[lang]}
+                  </>
+                ),
               }))}
             />
           </Field>

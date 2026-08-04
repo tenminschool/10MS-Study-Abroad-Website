@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { MagnifyingGlass, Calendar, CheckCircle, CaretRight, GraduationCap, Sparkle, CaretDown, CaretUp, X, SlidersHorizontal, ArrowCounterClockwise } from '@phosphor-icons/react';
+import { Flag } from '../../components/Flag';
 import './scholarships.css';
 
 interface Scholarship {
@@ -515,7 +516,7 @@ function ScholarshipCard({ schol }: { schol: Scholarship }) {
       
       <div className="flex items-center gap-2 mb-3">
         <div className="country-pill-upgrade">
-          <span className="text-base leading-none">{schol.flag}</span>
+          <Flag emoji={schol.flag} className="text-base leading-none" />
           <span>{schol.country}</span>
         </div>
       </div>

@@ -14,7 +14,7 @@ export const CONFIG = {
   bookingUrl: 'https://forms.gle/AF7Brcz5zCebVUuz6',
 
   /** Where the free Mini Mock Test promo sends students (English step, "No" branch). */
-  mockTestUrl: 'https://10minuteschool.com',
+  mockTestUrl: 'https://10minuteschool.com/product/ielts-programme/',
 
   /** Cloudflare Turnstile site key (public). Leave empty to disable in local dev. */
   turnstileSiteKey: '',

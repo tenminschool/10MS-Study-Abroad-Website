@@ -316,17 +316,19 @@ export async function POST(request: Request): Promise<Response> {
       const leadJson = (await leadPrev.json()) as { values?: string[][] };
       const leadId = leadJson.values?.[0]?.[0] ?? crypto.randomUUID();
 
-      await fetch(`${api(sheetId, `${tab}!A${existing}`)}?valueInputOption=RAW`, {
+      const put = await fetch(`${api(sheetId, `${tab}!A${existing}`)}?valueInputOption=RAW`, {
         method: 'PUT',
         headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
         body: JSON.stringify({ values: [buildRow(leadId, createdAt, body, matches)] }),
       });
+      if (!put.ok) throw new Error(`sheet update ${put.status}: ${await put.text()}`);
     } else {
-      await fetch(`${api(sheetId, `${tab}!A1`)}:append?valueInputOption=RAW&insertDataOption=INSERT_ROWS`, {
+      const append = await fetch(`${api(sheetId, `${tab}!A1`)}:append?valueInputOption=RAW&insertDataOption=INSERT_ROWS`, {
         method: 'POST',
         headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
         body: JSON.stringify({ values: [buildRow(crypto.randomUUID(), now, body, matches)] }),
       });
+      if (!append.ok) throw new Error(`sheet append ${append.status}: ${await append.text()}`);
     }
   } catch (err) {
     // The student still gets their result — losing the lead is our problem, not theirs.

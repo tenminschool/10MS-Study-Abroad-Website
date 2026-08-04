@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { MagnifyingGlass, CaretRight, GraduationCap, Sparkle, CaretDown, CaretUp, X, SlidersHorizontal, ArrowCounterClockwise, BookOpen, MapPin, Clock, Briefcase } from '@phosphor-icons/react';
 import { destinations, universities, programs } from '../../data/destinations';
+import { Flag } from '../../components/Flag';
 import './programs.css';
 
 export default function ProgramsPage() {
@@ -418,7 +419,7 @@ function ProgramCard({ program, lang, currentTranslations }: { program: any; lan
       </div>
 
       <div className="program-card-uni-meta">
-        <span className="country-flag-badge">{program.countryFlag}</span>
+        <Flag emoji={program.countryFlag} className="country-flag-badge" />
         <span className="uni-name-text-sm">{program.universityName}</span>
       </div>
 

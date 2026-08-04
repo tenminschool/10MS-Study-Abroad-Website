@@ -2,6 +2,7 @@ import React from 'react';
 import { destinations, universities } from '../../../data/destinations';
 import Link from 'next/link';
 import { MapPin, CurrencyDollar, BookOpen, Clock, CaretRight, GraduationCap, Medal, Calendar, Briefcase, Users, CheckCircle, ChartBar } from '@phosphor-icons/react/ssr';
+import { Flag } from '../../../components/Flag';
 import './country.css';
 
 export async function generateMetadata({ params }: { params: Promise<{ country: string }> }) {
@@ -52,7 +53,7 @@ export default async function CountryPage({ params }: { params: Promise<{ countr
           <div className="hero-header-flex">
             <div className="hero-title-area">
               <div className="hero-flag-title">
-                <span className="hero-flag">{country.flag_emoji}</span>
+                <Flag emoji={country.flag_emoji} className="hero-flag" />
                 <h1 className="hero-title">Study in {country.name}</h1>
               </div>
               <p className="hero-desc">

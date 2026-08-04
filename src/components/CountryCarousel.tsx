@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
+import { Flag } from './Flag';
 
 export interface CountryCardData {
   slug: string;
@@ -172,14 +173,14 @@ function CountryCard({ data, lang, tabIndex, ariaHidden, priority }: CountryCard
           />
         </picture>
         <span className="country-card-badge">
-          <span aria-hidden="true">{data.flag}</span> {data.chipLabel}
+          <Flag emoji={data.flag} /> {data.chipLabel}
         </span>
       </div>
 
       <div className="country-card-info-box">
         <div className="country-card-title-row">
           <h3 className="bn">{data.name}</h3>
-          <span className="country-card-flag-emoji">{data.flag}</span>
+          <Flag emoji={data.flag} className="country-card-flag-emoji" />
         </div>
 
         <div className="country-card-detail-item">

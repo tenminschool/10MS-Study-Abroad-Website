@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { MagnifyingGlass, SlidersHorizontal, CaretRight, X, ArrowCounterClockwise, CaretDown, CaretUp } from '@phosphor-icons/react';
+import { Flag } from '../../components/Flag';
 import './destinations.css';
 
 // Region helper mapping
@@ -407,7 +408,7 @@ export default function DestinationsClient({ destinations }: DestinationsClientP
                         {/* Content */}
                         <div className="card-content">
                           <div className="card-title-row">
-                            <span className="card-flag">{country.flag_emoji}</span>
+                            <Flag emoji={country.flag_emoji} className="card-flag" />
                             <h2 className="card-country-name bn">
                               {country.name}
                             </h2>

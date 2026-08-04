@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { X } from '@phosphor-icons/react';
+import { Flag } from '../../components/Flag';
 import './compare.css';
 
 // --- Data ---
@@ -187,7 +188,7 @@ export default function ComparePage() {
                 className={`select-pill ${isSelected ? 'selected' : ''}`}
               >
                 <span className="pill-icon">{isSelected ? '−' : '+'}</span>
-                <span>{item.flag} {item.name}</span>
+                <span><Flag emoji={item.flag} /> {item.name}</span>
               </button>
             )
           })}
@@ -229,7 +230,7 @@ export default function ComparePage() {
                       <th key={id}>
                         <div className="compare-header-item flex items-center justify-between">
                           <div className="flex items-center gap-2">
-                            {activeTab === 'country' && <span>{(data as any).flag}</span>}
+                            {activeTab === 'country' && <Flag emoji={(data as any).flag} />}
                             <h3 className="h3 text-[var(--fg-1)] m-0 p-0 leading-tight">{(data as any).name}</h3>
                           </div>
                           <button 

@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useApp } from '../app/providers'
 import { DESTINATIONS } from '../engine/match'
+import { Flag } from './Flag'
 
 // ============================================================
 // Hero graphic: routes out of Dhaka to the seven destinations.
@@ -15,6 +16,12 @@ import { DESTINATIONS } from '../engine/match'
 // ============================================================
 
 const ORIGIN = { x: 110, y: 306 }
+
+// SVG <text> can't render flag-icons' background-image spans, so flags are
+// drawn via a small foreignObject instead — sized to match the old fm-flag
+// text glyph's footprint.
+const FLAG_W = 26
+const FLAG_H = 20
 
 // One coherent fan: every route bows the same way, curvature grows gently
 // with distance, and no arc loops back across another. `labelAbove` keeps
@@ -111,9 +118,11 @@ export function FlightMap() {
           home ring. */}
       <circle className="fm-origin-ring" cx={ORIGIN.x} cy={ORIGIN.y} r="20" />
       <circle className="fm-node fm-node-live" cx={ORIGIN.x} cy={ORIGIN.y} r="20" />
-      <text className="fm-flag" x={ORIGIN.x} y={ORIGIN.y}>
-        🇧🇩
-      </text>
+      <foreignObject x={ORIGIN.x - FLAG_W / 2} y={ORIGIN.y - FLAG_H / 2} width={FLAG_W} height={FLAG_H}>
+        <div className="fm-flag-wrap">
+          <Flag emoji="🇧🇩" className="fm-flag-icon" />
+        </div>
+      </foreignObject>
       <text className="fm-name" x={ORIGIN.x} y={ORIGIN.y + 36}>
         {lang === 'bn' ? 'বাংলাদেশ' : 'Bangladesh'}
       </text>
@@ -126,9 +135,11 @@ export function FlightMap() {
             cy={pos.y}
             r="20"
           />
-          <text className="fm-flag" x={pos.x} y={pos.y}>
-            {d.flag}
-          </text>
+          <foreignObject x={pos.x - FLAG_W / 2} y={pos.y - FLAG_H / 2} width={FLAG_W} height={FLAG_H}>
+            <div className="fm-flag-wrap">
+              <Flag emoji={d.flag} className="fm-flag-icon" />
+            </div>
+          </foreignObject>
           <text
             className="fm-name"
             x={pos.x}

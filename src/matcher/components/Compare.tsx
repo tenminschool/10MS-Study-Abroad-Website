@@ -4,6 +4,7 @@ import { useApp } from '../app/providers'
 import { destinationById } from '../engine/match'
 import type { Destination, MatchOutput, MatchResult, StudyLevel } from '../engine/types'
 import { band, money, moneyRange, num } from '../lib/format'
+import { Flag } from './Flag'
 
 type Row = {
   key: string
@@ -213,9 +214,7 @@ export function Compare({
               <th />
               {entries.map(({ d }) => (
                 <th key={d.id}>
-                  <span className="row-flag" aria-hidden="true">
-                    {d.flag}
-                  </span>{' '}
+                  <Flag emoji={d.flag} className="row-flag" />{' '}
                   {d.name[lang]}
                 </th>
               ))}

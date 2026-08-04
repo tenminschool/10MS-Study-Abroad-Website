@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import HomeHero from '../components/HomeHero';
 import CountryCarousel from '../components/CountryCarousel';
+import { Flag } from '../components/Flag';
 import { destinations } from '../data/destinations';
 import './page.css';
 
@@ -96,7 +97,7 @@ function TestimonialsSection({ lang }: CountrySectionProps) {
                 <p className="test-card-quote">"{testimonial.quote}"</p>
                 <div className="test-card-footer">
                   <span className="test-card-country-badge">
-                    {testimonial.countryFlag} {testimonial.countryName}
+                    <Flag emoji={testimonial.countryFlag} /> {testimonial.countryName}
                   </span>
                 </div>
               </div>
