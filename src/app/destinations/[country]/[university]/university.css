@@ -18,9 +18,18 @@
 
 .text-white { color: white !important; }
 .text-light-blue { color: #A7ACB4; }
+.text-light { color: var(--fg-2); }
+.text-teal { color: var(--success); }
 .bg-gold { background-color: var(--premium-gold-2) !important; }
 .text-navy { color: #16181C !important; }
 .hover-bg-gold-light:hover { background-color: #ffb84d !important; }
+.hover-bg-white:hover { background-color: rgba(255, 255, 255, 0.08); }
+.border-white { border-color: rgba(255, 255, 255, 0.5); }
+.border-none { border: none; }
+.font-semibold { font-weight: 600; }
+.block { display: block; }
+.flex-wrap { flex-wrap: wrap; }
+.text-sm { font-size: 0.875rem; }
 
 .uni-layout {
   display: grid;
@@ -28,7 +37,12 @@
   gap: 32px;
 }
 
+.mb-8 { margin-bottom: var(--s-6); } /* 24px — matches the sidebar's .mb-6 card rhythm below */
 .mb-6 { margin-bottom: 24px; }
+.mb-4 { margin-bottom: var(--s-4); }
+.mb-2 { margin-bottom: var(--s-2); }
+.mt-2 { margin-top: var(--s-2); }
+.pb-4 { padding-bottom: var(--s-4); }
 .bg-navy { background-color: #16181C; }
 
 .req-list {

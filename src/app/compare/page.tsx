@@ -148,7 +148,7 @@ export default function ComparePage() {
   const isReady = currentSelection.length >= 2;
 
   return (
-    <div className="compare-page container py-12">
+    <div className="container py-12">
       {/* Header section */}
       <div className="mb-10">
         <h1 className="h1 bn mb-2">তুলনা অপশন (Compare Options)</h1>
@@ -175,7 +175,7 @@ export default function ComparePage() {
 
       {/* Selectors */}
       <div className="mb-8">
-        <p className="meta mb-4 font-semibold text-[var(--fg-1)]">
+        <p className="meta mb-4 font-semibold text-fg-1">
           Add {activeTab === 'country' ? 'Countries' : 'Universities'} to Compare (max 3)
         </p>
         <div className="pill-container">
@@ -231,7 +231,7 @@ export default function ComparePage() {
                         <div className="compare-header-item flex items-center justify-between">
                           <div className="flex items-center gap-2">
                             {activeTab === 'country' && <Flag emoji={(data as any).flag} />}
-                            <h3 className="h3 text-[var(--fg-1)] m-0 p-0 leading-tight">{(data as any).name}</h3>
+                            <h3 className="h3 text-fg-1 m-0 p-0 leading-tight">{(data as any).name}</h3>
                           </div>
                           <button 
                             className="btn-remove-inline"
@@ -309,7 +309,7 @@ export default function ComparePage() {
                     </tr>
                   </>
                 )}
-                <tr className="bg-[var(--surface-subtle)]">
+                <tr className="bg-surface-subtle">
                   <td className="feature-name border-none"></td>
                   {currentSelection.map(id => {
                     const data = activeTab === 'country' 

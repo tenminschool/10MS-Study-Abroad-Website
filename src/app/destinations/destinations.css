@@ -278,7 +278,6 @@
   background-color: rgba(229, 50, 45, 0.08);
   display: flex;
   align-items: center;
-  justify-content: justify-center; /* Wait, justify-content should be center! */
   justify-content: center;
   color: var(--ten-red);
   transition: all var(--dur-base) var(--ease-out);
@@ -339,6 +338,12 @@
   display: flex;
   align-items: center;
   gap: 4px;
+  color: var(--ten-red);
+  transition: color var(--dur-base) var(--ease-out);
+}
+
+.clear-all-btn:hover {
+  color: var(--ten-red-dark);
 }
 
 .filter-scroll-area {
@@ -493,6 +498,7 @@
 }
 
 .mobile-filter-toggle-btn {
+  display: none !important;
   background-color: var(--success);
   border: 1px solid var(--success-dark);
   color: white;
@@ -503,5 +509,43 @@
 
 .mobile-filter-toggle-btn:hover {
   background-color: #0C6349;
+}
+
+.mobile-drawer-close-x {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  color: var(--fg-2);
+  cursor: pointer;
+  padding: 4px;
+}
+
+@media (max-width: 991px) {
+  .mobile-filter-toggle-btn { display: inline-flex !important; }
+  .mobile-drawer-close-x { display: flex; }
+}
+
+/* Local utility classes (this project has no Tailwind installed) */
+.text-emerald-500 { color: var(--success); }
+.font-bold { font-weight: 700; }
+.text-fg-1 { color: var(--fg-1); }
+.text-fg-3 { color: var(--fg-3); }
+.text-border-strong { color: var(--border-strong); }
+.text-base { font-size: 1rem; }
+.text-xs { font-size: 0.75rem; }
+.font-semibold { font-weight: 600; }
+.transition-colors { transition: color var(--dur-base) var(--ease-out); }
+.mb-8 { margin-bottom: var(--s-6); }
+.mb-6 { margin-bottom: var(--s-6); }
+.mb-4 { margin-bottom: var(--s-4); }
+.mb-2 { margin-bottom: var(--s-2); }
+.flex-wrap { flex-wrap: wrap; }
+.p-12 { padding: 48px; }
+.mx-auto { margin-left: auto; margin-right: auto; }
+
+.btn-clear-filters {
+  padding: 10px 24px;
 }
 

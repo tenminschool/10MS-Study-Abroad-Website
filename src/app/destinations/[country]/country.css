@@ -166,7 +166,7 @@
   justify-content: center;
 }
 
-.stat-icon-wrapper.tuition { background-color: rgba(229, 50, 45, 0.09); color: var(--success); }
+.stat-icon-wrapper.tuition { background-color: rgba(15, 122, 87, 0.09); color: var(--success); }
 .stat-icon-wrapper.living { background-color: rgba(229, 50, 45, 0.08); color: var(--ten-red); }
 .stat-icon-wrapper.universities { background-color: rgba(164, 104, 12, 0.1); color: var(--warn); }
 .stat-icon-wrapper.work { background-color: rgba(164, 104, 12, 0.08); color: var(--warn-deep); }
@@ -345,7 +345,7 @@
 }
 
 .uni-scholarship-badge {
-  background: rgba(229, 50, 45, 0.09);
+  background: rgba(15, 122, 87, 0.09);
   color: var(--success);
   font-weight: 600;
   padding: 2px 8px;

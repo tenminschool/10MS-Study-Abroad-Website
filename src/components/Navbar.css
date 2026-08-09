@@ -1,7 +1,7 @@
 .navbar {
   position: sticky;
   top: 0;
-  z-index: 100;
+  z-index: 50;
   background-color: var(--surface-card);
   border-bottom: 1px solid var(--border);
   box-shadow: var(--sh-card);
@@ -25,22 +25,6 @@
   display: block;
 }
 
-.nav-links {
-  display: flex;
-  align-items: center;
-  gap: 32px;
-}
-
-.nav-link {
-  font-weight: 500;
-  color: var(--fg-1);
-  transition: all var(--dur-base) var(--ease-out);
-}
-
-.nav-link:hover {
-  color: var(--success);
-}
-
 .nav-actions {
   display: flex;
   align-items: center;
@@ -51,66 +35,24 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  background: none;
-  border: none;
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: var(--ten-ink);
-  cursor: pointer;
-  transition: all var(--dur-base) var(--ease-out);
-}
-
-.lang-toggle:hover {
-  color: var(--success);
-}
-
-.theme-toggle {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
   background: var(--surface-subtle);
-  border: 1px solid var(--border);
+  border: 1px solid var(--border-strong);
   border-radius: var(--r-pill);
+  padding: 8px 16px;
+  font-size: 0.875rem;
+  font-weight: 700;
   color: var(--fg-1);
   cursor: pointer;
   transition: all var(--dur-base) var(--ease-out);
 }
 
-.theme-toggle:hover {
-  color: var(--success);
+.lang-toggle:hover {
   border-color: var(--success);
+  color: var(--success);
 }
 
-.mobile-menu-btn {
-  display: none;
-  background: none;
-  border: none;
-  color: var(--ten-ink);
-  cursor: pointer;
+.lang-toggle:focus-visible {
+  outline: 2px solid var(--success);
+  outline-offset: 2px;
 }
 
-@media (max-width: 992px) {
-  .nav-links {
-    position: absolute;
-    top: 72px;
-    left: 0;
-    width: 100%;
-    background-color: var(--surface-card);
-    flex-direction: column;
-    padding: 24px;
-    gap: 24px;
-    box-shadow: var(--sh-raised);
-    clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
-    transition: clip-path 0.3s ease-in-out;
-  }
-
-  .nav-links.active {
-    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
-  }
-
-  .mobile-menu-btn {
-    display: block;
-  }
-}

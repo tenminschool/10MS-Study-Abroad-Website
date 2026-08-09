@@ -13,7 +13,7 @@ import '../matcher/styles/matcher.css';
 
 // The matcher project's homepage hero, ported wholesale (headline, CTAs,
 // flight-map visual, stats strip, service tiles) so the two CTAs and their
-// destination-matcher form (now living at /quiz) carry over unchanged.
+// destination-matcher form (now living at /profile-match) carry over unchanged.
 function HeroInner() {
   const { t, lang } = useApp();
   const [logoOk, setLogoOk] = useState(true);
@@ -36,7 +36,7 @@ function HeroInner() {
             <p className="lede">{t('hero.lede')}</p>
 
             <div className="cta-row">
-              <Link href="/quiz" className="btn btn-primary btn-lg">
+              <Link href="/profile-match" className="btn btn-primary btn-lg">
                 {t('hero.cta')}
                 <span className="arrow" aria-hidden="true">→</span>
               </Link>

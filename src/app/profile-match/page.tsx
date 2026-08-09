@@ -39,7 +39,7 @@ function attribution() {
   };
 }
 
-function QuizInner() {
+function ProfileMatchInner() {
   const { t, lang } = useApp();
   const router = useRouter();
   const [screen, setScreen] = useState<Screen>('form');
@@ -159,22 +159,15 @@ function QuizInner() {
           </div>
         )}
       </main>
-
-      <div className="footer">
-        <div className="wrap stack stack-3">
-          <p>{t('footer.privacy')}</p>
-          <p className="muted">{t('footer.rules', { v: RULES_VERSION, d: '—' })}</p>
-        </div>
-      </div>
     </div>
   );
 }
 
-export default function QuizPage() {
+export default function ProfileMatchPage() {
   return (
     <div className="sam-ui sam-home-hero">
       <AppProvider>
-        <QuizInner />
+        <ProfileMatchInner />
       </AppProvider>
     </div>
   );

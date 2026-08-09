@@ -194,7 +194,7 @@ export default function ProgramsPage() {
   const currentTranslations = lang === 'bn' ? t.bn : t.en;
 
   return (
-    <div className="programs-page bg-light-upgrade min-h-screen">
+    <div className="bg-light-upgrade min-h-screen">
       {/* Dark Gradient Hero Header */}
       <section className="dark-hero-style-upgrade text-center relative pt-20 pb-36">
         <div className="announcement-shimmer mb-6 mx-auto inline-flex items-center gap-2">
@@ -257,15 +257,15 @@ export default function ProgramsPage() {
 
                   <div className="flex items-center gap-2">
                     {activeFiltersCount > 0 && (
-                      <button 
+                      <button
                         onClick={handleClearAll}
-                        className="clear-all-btn text-xs font-semibold text-red-500 flex items-center gap-1 hover:text-red-600 transition-colors"
+                        className="clear-all-btn text-xs font-semibold flex items-center gap-1"
                       >
                         <ArrowCounterClockwise size={12} /> {currentTranslations.clearAll}
                       </button>
                     )}
-                    <button 
-                      className="mobile-drawer-close-x md:hidden" 
+                    <button
+                      className="mobile-drawer-close-x"
                       onClick={() => setMobileDrawerOpen(false)}
                     >
                       <X size={20} />
@@ -361,8 +361,8 @@ export default function ProgramsPage() {
 
             {/* Mobile Drawer overlay backdrop */}
             {mobileDrawerOpen && (
-              <div 
-                className="mobile-drawer-backdrop md:hidden"
+              <div
+                className="mobile-drawer-backdrop"
                 onClick={() => setMobileDrawerOpen(false)}
               ></div>
             )}
@@ -378,8 +378,8 @@ export default function ProgramsPage() {
                 </div>
 
                 {/* Mobile Filter Toggle button */}
-                <button 
-                  className="mobile-filter-toggle-btn btn btn-primary flex md:hidden items-center gap-2"
+                <button
+                  className="mobile-filter-toggle-btn btn btn-primary flex items-center gap-2"
                   onClick={() => setMobileDrawerOpen(true)}
                 >
                   <SlidersHorizontal size={16} /> Filters {activeFiltersCount > 0 && `(${activeFiltersCount})`}

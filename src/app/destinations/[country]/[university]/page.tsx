@@ -9,7 +9,15 @@ export default async function UniversityPage({ params }: { params: Promise<{ cou
   const uni = universities.find(u => u.slug === university && u.country_slug === country);
   
   if (!uni) {
-    return <div className="container py-12">University not found</div>;
+    return (
+      <div className="not-found-wrap">
+        <div className="card not-found-box">
+          <h2>University Not Found</h2>
+          <p>The university you are looking for does not exist or has been moved.</p>
+          <Link href="/destinations" className="btn btn-primary w-full">Back to Destinations</Link>
+        </div>
+      </div>
+    );
   }
 
   const uniPrograms = programs.filter(p => p.university_slug === uni.slug);

@@ -320,10 +320,10 @@ export default function ArticleDetailPage({ params }: { params: Promise<{ slug: 
 
   if (!article) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-4">
-        <div className="card text-center max-w-md p-8 shadow-lg">
-          <h2 className="text-2xl font-bold mb-4">Article Not Found</h2>
-          <p className="text-[var(--fg-3)] mb-6">The article you are looking for does not exist or has been moved.</p>
+      <div className="not-found-wrap">
+        <div className="card not-found-box">
+          <h2>Article Not Found</h2>
+          <p>The article you are looking for does not exist or has been moved.</p>
           <Link href="/resources" className="btn btn-primary w-full">Back to Resources</Link>
         </div>
       </div>

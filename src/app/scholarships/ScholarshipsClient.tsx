@@ -165,7 +165,7 @@ export default function ScholarshipsClient({ scholarships: scholarshipsData }: S
   ];
 
   return (
-    <div className="scholarships-page bg-light-upgrade min-h-screen">
+    <div className="bg-light-upgrade min-h-screen">
       {/* Dark Gradient Hero Section with Geo Watermarks */}
       <section className="dark-hero-style-upgrade text-center relative pt-20 pb-36">
         <div className="announcement-shimmer mb-6 mx-auto inline-flex items-center gap-2">
@@ -205,22 +205,22 @@ export default function ScholarshipsClient({ scholarships: scholarshipsData }: S
                 <div className="filter-sidebar-header">
                   <div className="flex items-center gap-2">
                     <SlidersHorizontal size={18} className="text-emerald-500" />
-                    <span className="font-bold text-[var(--fg-1)] text-base">
+                    <span className="font-bold text-fg-1 text-base">
                       Filters {activeFiltersCount > 0 && `(${activeFiltersCount})`}
                     </span>
                   </div>
                   
                   <div className="flex items-center gap-2">
                     {activeFiltersCount > 0 && (
-                      <button 
+                      <button
                         onClick={handleClearAll}
-                        className="clear-all-btn text-xs font-semibold text-red-500 flex items-center gap-1 hover:text-red-600 transition-colors"
+                        className="clear-all-btn text-xs font-semibold flex items-center gap-1"
                       >
                         <ArrowCounterClockwise size={12} /> Clear All
                       </button>
                     )}
-                    <button 
-                      className="mobile-drawer-close-x md:hidden" 
+                    <button
+                      className="mobile-drawer-close-x"
                       onClick={() => setMobileDrawerOpen(false)}
                     >
                       <X size={20} />
@@ -412,8 +412,8 @@ export default function ScholarshipsClient({ scholarships: scholarshipsData }: S
 
             {/* Mobile Drawer Overlay Backdrop */}
             {mobileDrawerOpen && (
-              <div 
-                className="mobile-drawer-backdrop md:hidden"
+              <div
+                className="mobile-drawer-backdrop"
                 onClick={() => setMobileDrawerOpen(false)}
               ></div>
             )}
@@ -429,8 +429,8 @@ export default function ScholarshipsClient({ scholarships: scholarshipsData }: S
                 </div>
                 
                 {/* Mobile Filter Toggle Button */}
-                <button 
-                  className="mobile-filter-toggle-btn btn btn-primary flex md:hidden items-center gap-2"
+                <button
+                  className="mobile-filter-toggle-btn btn btn-primary flex items-center gap-2"
                   onClick={() => setMobileDrawerOpen(true)}
                 >
                   <SlidersHorizontal size={16} /> Filters {activeFiltersCount > 0 && `(${activeFiltersCount})`}
@@ -439,12 +439,12 @@ export default function ScholarshipsClient({ scholarships: scholarshipsData }: S
 
               {filteredScholarships.length === 0 ? (
                 <div className="card text-center p-12 animate-fade-in-up">
-                  <SlidersHorizontal size={48} className="mx-auto text-[var(--border-strong)] mb-4" />
+                  <SlidersHorizontal size={48} className="mx-auto text-border-strong mb-4" />
                   <h3 className="h3 mb-2">কোন স্কলারশিপ পাওয়া যায়নি</h3>
-                  <p className="text-[var(--fg-3)] mb-6">আপনার সিলেক্ট করা ফিল্টারের সাথে মিলে যায় এমন কোন স্কলারশিপ পাওয়া যায়নি।</p>
-                  <button 
+                  <p className="text-fg-3 mb-6">আপনার সিলেক্ট করা ফিল্টারের সাথে মিলে যায় এমন কোন স্কলারশিপ পাওয়া যায়নি।</p>
+                  <button
                     onClick={handleClearAll}
-                    className="btn btn-primary px-6 py-2.5 mx-auto"
+                    className="btn btn-primary btn-clear-filters mx-auto"
                   >
                     Clear All Filters
                   </button>
@@ -462,8 +462,8 @@ export default function ScholarshipsClient({ scholarships: scholarshipsData }: S
         </div>
 
         {/* Lead Generation Bottom Banner */}
-        <div className="card bg-inverse text-white p-12 dark-hero-style flex flex-col md:flex-row items-center justify-between gap-8 mb-12">
-          <div className="flex-1 text-center md:text-left">
+        <div className="card text-white p-12 dark-hero-style flex flex-col md-flex-row items-center justify-between gap-8 mb-12">
+          <div className="flex-1 text-center md-text-left">
             <h2 className="text-white mb-4 h2 bn">যোগ্যতা অনুযায়ী স্কলারশিপ খুঁজছেন?</h2>
             <p className="max-w-600 text-white body bn" style={{ opacity: 0.85 }}>
               আমাদের এক্সপার্টরা আপনার প্রোফাইল অ্যানালাইজ করে জানিয়ে দিবেন কোন দেশে আপনার জন্য সেরা ফান্ডিং এর সুযোগ রয়েছে।
@@ -522,22 +522,22 @@ function ScholarshipCard({ schol }: { schol: Scholarship }) {
       </div>
 
       <div className="funding-box-upgrade flex items-start gap-2 mb-4">
-        <div className="mt-0.5"><Sparkle size={16} className="text-emerald-500 sparkle-icon-pill" /></div>
+        <div className="mt-0-5"><Sparkle size={16} className="text-emerald-500 sparkle-icon-pill" /></div>
         <div className="funding-text-p">{schol.funding}</div>
       </div>
 
-      <p className="description-text-upgrade text-[var(--fg-2)] line-clamp-2 mb-4">
+      <p className="description-text-upgrade text-fg-2 line-clamp-2 mb-4">
         {schol.description}
       </p>
 
       <div className="divider mb-4"></div>
 
       <div className="eligibility-section-upgrade flex-1 mb-4">
-        <h4 className="meta text-[var(--fg-3)] uppercase tracking-wider mb-3 text-xs font-bold">Eligibility</h4>
-        <ul className="flex flex-col gap-2.5">
+        <h4 className="meta text-fg-3 uppercase tracking-wider mb-3 text-xs font-bold">Eligibility</h4>
+        <ul className="flex flex-col gap-2-5">
           {schol.eligibility?.map((item, i) => (
-            <li key={i} className="flex items-start gap-2 body-sm text-[var(--fg-1)]">
-              <CheckCircle size={16} className="text-emerald-500 mt-0.5 shrink-0"/>
+            <li key={i} className="flex items-start gap-2 body-sm text-fg-1">
+              <CheckCircle size={16} className="text-emerald-500 mt-0-5 shrink-0"/>
               <span className="eligibility-item-text">{item}</span>
             </li>
           ))}
@@ -545,7 +545,7 @@ function ScholarshipCard({ schol }: { schol: Scholarship }) {
       </div>
 
       {/* Card Footer */}
-      <div className="card-footer-upgrade mt-auto pt-4 flex items-center justify-between border-t border-slate-100">
+      <div className="mt-auto pt-4 flex items-center justify-between border-t">
         <div className={`deadline-badge-upgrade ${isNear ? 'deadline-danger' : 'deadline-normal'}`}>
           <Calendar size={14}/>
           <span>{schol.deadline}</span>

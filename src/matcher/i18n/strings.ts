@@ -213,15 +213,6 @@ export const strings: Record<string, Pair> = {
     en: 'A mock or practice test score works fine. Leave it empty if you are not sure.',
     bn: 'মক বা প্র্যাকটিস টেস্টের স্কোর দিলেও চলবে। নিশ্চিত না হলে খালি রাখুন।',
   },
-  'promo.mock.title': {
-    en: 'Test your IELTS score',
-    bn: 'আপনার IELTS স্কোর যাচাই করুন',
-  },
-  'promo.mock.body': {
-    en: 'To test your IELTS score, attend our Mini Mock Test for free.',
-    bn: 'আপনার IELTS স্কোর যাচাই করতে ফ্রিতে আমাদের মিনি মক টেস্টে অংশ নিন।',
-  },
-  'promo.mock.cta': { en: 'Attend for free', bn: 'ফ্রিতে অংশ নিন' },
   'f.englishTest': { en: 'Which test?', bn: 'কোন পরীক্ষা?' },
   'f.englishOverall': { en: 'Overall score', bn: 'ওভারঅল স্কোর' },
   'f.band.listening': { en: 'Listening', bn: 'Listening' },

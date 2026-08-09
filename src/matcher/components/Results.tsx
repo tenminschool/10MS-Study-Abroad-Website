@@ -304,16 +304,6 @@ export function Results({
             {t('btn.restart')}
           </button>
         </div>
-
-        <div className="promo" style={{ marginTop: 'var(--sam-sp-6)' }}>
-          <div>
-            <div className="promo-title">{t('promo.mock.title')}</div>
-            <div className="promo-body">{t('promo.mock.body')}</div>
-          </div>
-          <a className="btn btn-brand" href={CONFIG.mockTestUrl} target="_blank" rel="noreferrer">
-            {t('promo.mock.cta')}
-          </a>
-        </div>
       </div>
 
       {picks.length > 0 && (

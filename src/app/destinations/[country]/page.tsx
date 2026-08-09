@@ -20,10 +20,10 @@ export default async function CountryPage({ params }: { params: Promise<{ countr
 
   if (!country) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-4">
-        <div className="card text-center max-w-md p-8 shadow-lg">
-          <h2 className="text-2xl font-bold mb-4">Destination Coming Soon</h2>
-          <p className="text-[var(--fg-2)] mb-6">We are still preparing the best universities and resources for this country.</p>
+      <div className="not-found-wrap">
+        <div className="card not-found-box">
+          <h2>Destination Coming Soon</h2>
+          <p>We are still preparing the best universities and resources for this country.</p>
           <Link href="/destinations" className="btn btn-primary w-full">সব দেশে ফিরে যান</Link>
         </div>
       </div>

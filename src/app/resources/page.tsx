@@ -13,7 +13,7 @@ export default function ResourcesPage() {
   ];
 
   return (
-    <div className="resources-page py-12 container">
+    <div className="py-12 container">
       <div className="flex items-center justify-between mb-8 flex-wrap gap-4">
         <h1>Resources & Blog</h1>
         <div className="search-input-wrapper">
@@ -33,7 +33,7 @@ export default function ResourcesPage() {
       <div className="resources-layout">
         <div className="resources-main">
           {/* Featured Article */}
-          <div className="card featured-article mb-8 p-0 overflow-hidden">
+          <div className="card mb-8 p-0 overflow-hidden">
             <div className="featured-img-placeholder" style={{ background: 'linear-gradient(135deg, #10B981 0%, #059669 100%)', height: '260px' }}></div>
             <div className="p-8">
               <span className="badge mb-2">Visa Guides</span>
@@ -45,11 +45,11 @@ export default function ResourcesPage() {
 
           <div className="articles-grid">
             {articles.map((art, idx) => (
-              <Link href={`/resources/${art.slug}`} key={idx} className="card article-card p-0 overflow-hidden hover:shadow-md transition-shadow block text-decoration-none">
+              <Link href={`/resources/${art.slug}`} key={idx} className="card article-card p-0 overflow-hidden block">
                 <div className="article-img-placeholder" style={{ background: 'linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%)', height: '160px' }}></div>
                 <div className="p-4">
                   <span className="text-xs text-teal font-semibold mb-2 block">{art.category}</span>
-                  <h3 className="text-md mb-2 text-[var(--fg-1)]" style={{ fontSize: '16px', fontWeight: '700' }}>{art.title}</h3>
+                  <h3 className="text-md mb-2 text-fg-1" style={{ fontSize: '16px', fontWeight: '700' }}>{art.title}</h3>
                   <div className="flex items-center gap-1 text-xs text-light">
                     <Clock size={12}/> {art.readTime} read
                   </div>

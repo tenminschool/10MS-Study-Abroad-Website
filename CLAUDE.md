@@ -33,12 +33,12 @@ may have breaking API changes. Before using an unfamiliar Next.js API, check `no
 ### Two parallel apps under one router
 
 - `src/app/**` — the marketing site: home, `/destinations`, `/destinations/[country]/[university]/[program]`,
-  `/programs`, `/scholarships`, `/resources`, `/compare`, `/counseling`, `/contact`, legal pages. Server components by
+  `/programs`, `/scholarships`, `/resources`, `/compare`, `/contact`, legal pages. Server components by
   default; pages needing interactivity delegate to a colocated `*Client.tsx` component (e.g. `HomeClient.tsx`,
-  `DestinationsClient.tsx`, `ProgramsClient.tsx`).
+  `DestinationsClient.tsx`, `ScholarshipsClient.tsx`).
 - `src/matcher/**` — a self-contained "destination matcher" module (originally a separate app called
   `study-abroad-matcher`, ported in wholesale) with its own data, i18n, engine, and components. It's mounted into the
-  main app at `src/app/quiz/page.tsx`, which just wires together `matcher/app/providers`, `matcher/components/*`, and
+  main app at `src/app/profile-match/page.tsx`, which just wires together `matcher/app/providers`, `matcher/components/*`, and
   `matcher/engine/match`. `src/matcher` has no dependency on `src/app`/`src/components`, so it could be lifted out
   intact.
 

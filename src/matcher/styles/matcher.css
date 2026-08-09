@@ -2,7 +2,7 @@
    Ported from study-abroad-matcher/src/styles/global.css.
    Every rule is scoped under .sam-ui so these classes (many of which
    share names with the main site's own globals, e.g. .btn/.card/.input)
-   never leak outside the matcher hero/quiz subtree. All matcher-original
+   never leak outside the matcher hero/profile-match subtree. All matcher-original
    custom properties are prefixed --sam- for the same reason — the main
    site already defines its own --r-sm, --warn, etc. tokens with different
    values tuned for its existing layouts.
@@ -133,47 +133,9 @@ html[data-theme='dark'] {
 .sam-ui .wrap-narrow { max-width: 780px; }
 @media (max-width: 640px) { .sam-ui .wrap { padding: 0 20px; } }
 
-.sam-ui .header {
-  position: sticky; top: 0; z-index: 60;
-  background: var(--sam-glass);
-  backdrop-filter: blur(20px) saturate(1.6);
-  -webkit-backdrop-filter: blur(20px) saturate(1.6);
-  border-bottom: 1px solid var(--sam-line);
-}
-.sam-ui .header-in { display: flex; align-items: center; justify-content: space-between; height: 68px; gap: 20px; }
-
-.sam-ui .brand {
-  display: flex; align-items: center; gap: 10px;
-  font-weight: 700; letter-spacing: -0.025em; font-size: 15px;
-  background: none; border: 0; padding: 0; color: inherit;
-  font-family: inherit; cursor: pointer; text-align: left;
-}
-.sam-ui .brand-logo { height: 34px; width: auto; display: block; }
-.sam-ui .brand-mark {
-  width: 34px; height: 34px; border-radius: 10px;
-  background: var(--sam-brand); color: #fff;
-  display: grid; place-items: center;
-  font-size: 13px; font-weight: 700; flex-shrink: 0;
-  font-family: var(--sam-font-latin);
-}
-.sam-ui .brand-sub { color: var(--sam-ink-3); font-weight: 400; }
-@media (max-width: 560px) { .sam-ui .brand-sub { display: none; } }
-
-.sam-ui .toggles { display: flex; align-items: center; gap: 8px; }
-.sam-ui .seg { display: inline-flex; background: var(--sam-sunk); border: 1px solid var(--sam-line); border-radius: var(--sam-r-full); padding: 3px; }
-.sam-ui .seg button {
-  border: 0; background: transparent; color: var(--sam-ink-3);
-  padding: 6px 13px; border-radius: var(--sam-r-full);
-  font-size: 12.5px; font-weight: 600; line-height: 1.4;
-  transition: all var(--sam-dur) var(--sam-ease);
-}
-.sam-ui .seg button[aria-pressed='true'] { background: var(--sam-surface); color: var(--sam-ink); box-shadow: var(--sam-shadow-soft); }
-
 .sam-ui .main { flex: 1; }
 .sam-ui .section { padding: var(--sam-sp-8) 0; }
 .sam-ui .section-alt { background: var(--sam-canvas-2); border-top: 1px solid var(--sam-line); }
-
-.sam-ui .footer { border-top: 1px solid var(--sam-line); padding: var(--sam-sp-6) 0 var(--sam-sp-7); color: var(--sam-ink-3); font-size: 13.5px; }
 
 /* ============================================================
    Type
@@ -224,8 +186,8 @@ html[data-lang='bn'] .sam-ui .h2 .heavy { font-style: normal; }
   padding: 14px 28px; font-size: 15px; font-weight: 600; line-height: 1.4;
   text-decoration: none; transition: all var(--sam-dur) var(--sam-ease);
 }
-.sam-ui .btn-primary { background: var(--sam-ink); color: var(--sam-on-solid); box-shadow: var(--sam-shadow-lift); }
-.sam-ui .btn-primary:hover:not(:disabled) { transform: translateY(-2px); }
+.sam-ui .btn-primary { background: var(--sam-ink); color: var(--sam-on-solid); box-shadow: 0 4px 14px rgba(22, 24, 28, 0.18); }
+.sam-ui .btn-primary:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(22, 24, 28, 0.22); }
 .sam-ui .btn-brand { background: var(--sam-brand); color: #fff; box-shadow: var(--sam-shadow-lift); }
 .sam-ui .btn-brand:hover:not(:disabled) { transform: translateY(-2px); }
 .sam-ui .btn-ghost { background: var(--sam-glass); color: var(--sam-ink); border-color: var(--sam-line-2); backdrop-filter: blur(10px); }
@@ -243,7 +205,7 @@ html[data-lang='bn'] .sam-ui .h2 .heavy { font-style: normal; }
 
 .sam-ui.sam-home-hero { background: var(--sam-canvas); }
 
-.sam-ui .hero { position: relative; z-index: 0; overflow: hidden; padding: var(--sam-sp-8) 0 0; }
+.sam-ui .hero { position: relative; z-index: 0; overflow: hidden; padding: var(--sam-sp-8) 0 var(--sam-sp-6); }
 .sam-ui .hero-glow {
   position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
   width: min(1300px, 140vw); height: 640px; pointer-events: none; z-index: -1;
@@ -338,14 +300,6 @@ html[data-theme='dark'] .sam-ui .hero-visual-glow {
 
 .sam-ui .map-note { font-size: 13.5px; color: var(--sam-ink-3); text-align: center; margin-top: 8px; }
 
-.sam-ui .promo {
-  display: flex; align-items: center; justify-content: space-between; gap: 16px;
-  flex-wrap: wrap; padding: 18px 20px;
-  background: var(--sam-brand-wash, var(--sam-surface));
-  border: 1px solid var(--sam-line); border-radius: var(--sam-r-md);
-}
-.sam-ui .promo-title { font-weight: 700; font-size: 15px; letter-spacing: -0.01em; }
-.sam-ui .promo-body { font-size: 13.5px; color: var(--sam-ink-2); margin-top: 3px; line-height: 1.5; max-width: 420px; }
 .sam-ui .fm-arc { fill: none; stroke: var(--sam-line-2); stroke-width: 1; }
 .sam-ui .fm-path { fill: none; stroke: var(--sam-ink-3); stroke-width: 1; stroke-dasharray: 3 8; stroke-linecap: round; opacity: 0.38; }
 .sam-ui .fm-path-live { stroke: var(--sam-brand); stroke-width: 1.5; opacity: 0.9; stroke-dasharray: 5 7; animation: sam-dash 1.4s linear infinite; }
@@ -505,30 +459,8 @@ html[data-theme='dark'] .sam-ui .hero-visual-glow {
 .sam-ui .subsection-title { margin-bottom: var(--sam-sp-3); }
 
 /* ============================================================
-   Results — verdict
+   Results
    ============================================================ */
-
-.sam-ui .verdict {
-  position: relative; overflow: hidden;
-  background: var(--sam-surface); border: 1px solid var(--sam-line);
-  border-radius: var(--sam-r-xl); padding: 44px;
-  box-shadow: var(--sam-shadow-lift); margin-bottom: 20px;
-}
-.sam-ui .verdict::before {
-  content: ''; position: absolute; inset: 0; pointer-events: none;
-  background: radial-gradient(ellipse 60% 100% at 88% 0%, var(--tier-wash, var(--sam-good-wash)), transparent 62%);
-}
-.sam-ui .verdict-in { position: relative; }
-@media (max-width: 640px) { .sam-ui .verdict { padding: 26px; border-radius: var(--sam-r-lg); } }
-
-.sam-ui .v-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 30px; flex-wrap: wrap; }
-.sam-ui .v-label { font-size: 11.5px; letter-spacing: 0.13em; text-transform: uppercase; font-weight: 600; color: var(--tier, var(--sam-good)); }
-.sam-ui .v-name { display: flex; align-items: center; gap: 14px; margin-top: 12px; font-size: clamp(32px, 4.8vw, 52px); font-weight: 700; letter-spacing: -0.04em; line-height: 1; }
-.sam-ui .v-flag { font-size: clamp(30px, 4.4vw, 48px); line-height: 1; }
-.sam-ui .v-sub { color: var(--sam-ink-2); margin-top: 14px; max-width: 460px; font-size: 15.5px; line-height: 1.6; }
-.sam-ui .v-score { text-align: end; flex-shrink: 0; }
-.sam-ui .v-score .n { font-size: clamp(54px, 8vw, 88px); font-weight: 700; letter-spacing: -0.055em; line-height: 0.86; color: var(--tier, var(--sam-good)); }
-.sam-ui .v-score .l { margin-top: 8px; }
 
 .sam-ui .reasons { margin-top: var(--sam-sp-6); display: grid; gap: 11px; }
 .sam-ui .reason { display: flex; gap: 12px; align-items: flex-start; font-size: 15px; line-height: 1.58; }
@@ -632,7 +564,7 @@ html[data-theme='dark'] .sam-ui .hero-visual-glow {
   display: flex; align-items: center; justify-content: space-between; gap: 18px;
   margin-top: var(--sam-sp-5);
 }
-@media (max-width: 600px) { .sam-ui .compare-bar { border-radius: var(--sam-r-lg); flex-direction: column; align-items: stretch; padding: 14px; } }
+@media (max-width: 600px) { .sam-ui .compare-bar { border-radius: var(--sam-r-lg); flex-direction: column; align-items: stretch; padding: 14px; padding-inline-end: 74px; } }
 
 .sam-ui .table-scroll {
   overflow-x: auto; border: 1px solid var(--sam-line);
@@ -676,6 +608,6 @@ html[data-theme='dark'] .sam-ui .hero-visual-glow {
 .sam-ui .sec-head .lede { margin-top: 16px; }
 
 @media print {
-  .sam-ui .header, .sam-ui .footer, .sam-ui .compare-bar, .sam-ui .actions, .sam-ui .pick, .sam-ui .hero-glow, .sam-ui .flightmap { display: none !important; }
-  .sam-ui .verdict, .sam-ui .row, .sam-ui .card { box-shadow: none; }
+  .sam-ui .compare-bar, .sam-ui .actions, .sam-ui .pick, .sam-ui .hero-glow, .sam-ui .flightmap { display: none !important; }
+  .sam-ui .row, .sam-ui .card { box-shadow: none; }
 }

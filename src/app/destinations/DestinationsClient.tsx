@@ -243,22 +243,22 @@ export default function DestinationsClient({ destinations }: DestinationsClientP
                 <div className="filter-sidebar-header">
                   <div className="flex items-center gap-2">
                     <SlidersHorizontal size={18} className="text-emerald-500" />
-                    <span className="font-bold text-[var(--fg-1)] text-base bn">
+                    <span className="font-bold text-fg-1 text-base bn">
                       {currentTranslations.filters} {activeFiltersCount > 0 && `(${activeFiltersCount})`}
                     </span>
                   </div>
 
                   <div className="flex items-center gap-2">
                     {activeFiltersCount > 0 && (
-                      <button 
+                      <button
                         onClick={handleClearAll}
-                        className="clear-all-btn text-xs font-semibold text-red-500 flex items-center gap-1 hover:text-red-600 transition-colors bn"
+                        className="clear-all-btn text-xs font-semibold flex items-center gap-1 bn"
                       >
                         <ArrowCounterClockwise size={12} /> {currentTranslations.clearAll}
                       </button>
                     )}
-                    <button 
-                      className="mobile-drawer-close-x md:hidden" 
+                    <button
+                      className="mobile-drawer-close-x"
                       onClick={() => setMobileDrawerOpen(false)}
                     >
                       <X size={20} />
@@ -354,8 +354,8 @@ export default function DestinationsClient({ destinations }: DestinationsClientP
 
             {/* Mobile Drawer Overlay Backdrop */}
             {mobileDrawerOpen && (
-              <div 
-                className="mobile-drawer-backdrop md:hidden"
+              <div
+                className="mobile-drawer-backdrop"
                 onClick={() => setMobileDrawerOpen(false)}
               ></div>
             )}
@@ -371,8 +371,8 @@ export default function DestinationsClient({ destinations }: DestinationsClientP
                 </div>
 
                 {/* Mobile Filter Toggle Button */}
-                <button 
-                  className="mobile-filter-toggle-btn btn md:hidden flex items-center gap-2 bn"
+                <button
+                  className="mobile-filter-toggle-btn btn flex items-center gap-2 bn"
                   onClick={() => setMobileDrawerOpen(true)}
                 >
                   <SlidersHorizontal size={16} /> Filters {activeFiltersCount > 0 && `(${activeFiltersCount})`}
@@ -381,12 +381,12 @@ export default function DestinationsClient({ destinations }: DestinationsClientP
 
               {filteredDestinations.length === 0 ? (
                 <div className="card text-center p-12 animate-fade-in-up">
-                  <SlidersHorizontal size={48} className="mx-auto text-[var(--border-strong)] mb-4" />
+                  <SlidersHorizontal size={48} className="mx-auto text-border-strong mb-4" />
                   <h3 className="h3 mb-2 bn">{currentTranslations.emptyTitle}</h3>
-                  <p className="text-[var(--fg-3)] mb-6 bn">{currentTranslations.emptyDesc}</p>
-                  <button 
+                  <p className="text-fg-3 mb-6 bn">{currentTranslations.emptyDesc}</p>
+                  <button
                     onClick={handleClearAll}
-                    className="btn btn-primary px-6 py-2.5 mx-auto bn"
+                    className="btn btn-primary btn-clear-filters mx-auto bn"
                   >
                     Clear All Filters
                   </button>

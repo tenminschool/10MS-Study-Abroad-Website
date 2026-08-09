@@ -4,6 +4,33 @@
 .text-xs { font-size: 0.75rem; }
 .p-4 { padding: 16px; }
 .p-8 { padding: 32px; }
+.py-12 { padding-top: 48px; padding-bottom: 48px; }
+.pb-2 { padding-bottom: var(--s-2); }
+.mb-8 { margin-bottom: var(--s-6); }
+.mb-6 { margin-bottom: var(--s-6); }
+.mb-4 { margin-bottom: var(--s-4); }
+.mb-2 { margin-bottom: var(--s-2); }
+.flex-wrap { flex-wrap: wrap; }
+.text-light { color: var(--fg-2); }
+.text-teal { color: var(--success); }
+.text-fg-1 { color: var(--fg-1); }
+.text-md { font-size: 1.1rem; }
+.text-sm { font-size: 0.875rem; }
+.font-semibold { font-weight: 600; }
+.block { display: block; }
+
+.filters-row {
+  display: flex;
+  align-items: center;
+}
+
+.article-card {
+  transition: box-shadow var(--dur-base) var(--ease-out);
+}
+
+.article-card:hover {
+  box-shadow: var(--sh-raised);
+}
 
 .resources-layout {
   display: grid;

@@ -3,6 +3,23 @@
 .text-md { font-size: 1.1rem; color: var(--ten-ink); }
 .border-b { border-bottom: 1px solid var(--border); }
 .pb-4 { padding-bottom: 16px; }
+.text-teal { color: var(--success); }
+.text-light { color: var(--fg-2); }
+.text-navy { color: var(--ten-ink); }
+.text-sm { font-size: 0.875rem; }
+.font-semibold { font-weight: 600; }
+.block { display: block; }
+.flex-wrap { flex-wrap: wrap; }
+.shadow-md { box-shadow: var(--sh-raised); }
+.mb-8 { margin-bottom: var(--s-6); } /* 24px — matches university.css's sibling value */
+.mb-6 { margin-bottom: var(--s-6); }
+.mb-4 { margin-bottom: var(--s-4); }
+.mb-3 { margin-bottom: var(--s-3); }
+.grid-2-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--s-4);
+}
 
 .prog-hero-content {
   flex: 1;

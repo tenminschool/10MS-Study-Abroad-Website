@@ -10,7 +10,15 @@ export default async function ProgramPage({ params }: { params: Promise<{ countr
   const uni = universities.find(u => u.slug === university);
   
   if (!prog || !uni) {
-    return <div className="container py-12">Program not found</div>;
+    return (
+      <div className="not-found-wrap">
+        <div className="card not-found-box">
+          <h2>Program Not Found</h2>
+          <p>The program you are looking for does not exist or has been moved.</p>
+          <Link href="/destinations" className="btn btn-primary w-full">Back to Destinations</Link>
+        </div>
+      </div>
+    );
   }
 
   return (

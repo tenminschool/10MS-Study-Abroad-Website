@@ -73,7 +73,9 @@ export async function fetchSheet(tabName: string) {
     queryTab = ' Scholarships ';
   }
 
-  const range = 'A2:Z';
+  // Most tabs reserve row 1 and put headers on row 2; a few have headers on row 1 instead.
+  const headerOnRow1Tabs = ['Testimonials'];
+  const range = headerOnRow1Tabs.includes(tabName) ? 'A1:Z' : 'A2:Z';
   const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(queryTab)}&range=${range}&headers=1`;
   
   const isDev = process.env.NODE_ENV === 'development';
