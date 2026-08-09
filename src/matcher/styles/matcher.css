@@ -296,7 +296,8 @@ html[data-theme='dark'] .sam-ui .hero-visual-glow {
   -webkit-mask-image: linear-gradient(to top, black 45%, transparent 96%);
   mask-image: linear-gradient(to top, black 45%, transparent 96%);
 }
-.sam-ui .flightmap { position: relative; z-index: 1; }
+.sam-ui .flightmap-wrap { position: relative; z-index: 1; }
+.sam-ui .flightmap { position: relative; }
 
 .sam-ui .map-note { font-size: 13.5px; color: var(--sam-ink-3); text-align: center; margin-top: 8px; }
 
@@ -306,8 +307,13 @@ html[data-theme='dark'] .sam-ui .hero-visual-glow {
 @keyframes sam-dash { to { stroke-dashoffset: -24; } }
 .sam-ui .fm-node { fill: var(--sam-surface); stroke: var(--sam-line-2); stroke-width: 1; filter: drop-shadow(0 4px 12px rgba(0,0,0,.10)); }
 .sam-ui .fm-node-live { stroke: var(--sam-brand); stroke-width: 1.5; }
-.sam-ui .fm-flag-wrap { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
-.sam-ui .fm-flag-icon { width: 26px; height: 20px; border-radius: 2px; box-shadow: 0 0 0 1px rgba(0,0,0,.08); }
+.sam-ui .fm-flag-chip {
+  position: absolute; z-index: 2; pointer-events: none;
+  width: 2.2414%; aspect-ratio: 26 / 20;
+  transform: translate(-50%, -50%);
+  display: flex; align-items: center; justify-content: center;
+}
+.sam-ui .fm-flag-icon { width: 100%; height: 100%; border-radius: 2px; box-shadow: 0 0 0 1px rgba(0,0,0,.08); }
 .sam-ui .fm-name {
   font-family: var(--sam-font-latin); font-size: 10.5px; font-weight: 600;
   letter-spacing: 0.07em; text-transform: uppercase;
@@ -317,7 +323,25 @@ html[data-theme='dark'] .sam-ui .hero-visual-glow {
 .sam-ui .fm-origin-ring { fill: none; stroke: var(--sam-brand); stroke-width: 1.5; opacity: 0.5; animation: sam-pulse 2.8s ease-out infinite; transform-origin: center; }
 @keyframes sam-pulse { 0% { r: 8; opacity: 0.6; } 100% { r: 26; opacity: 0; } }
 .sam-ui .fm-plane { fill: var(--sam-brand); }
-@media (max-width: 700px) { .sam-ui .fm-name { display: none; } }
+
+/* Below 700px the whole graphic is squeezed down to phone width, and since
+   every node/flag/line is sized as a fraction of that width (to stay in
+   lockstep with the SVG's own scaling), they shrink past the point of being
+   noticeable — flags render around 8px, route lines under 1px. Re-inflate
+   just those fractions on mobile so the map reads clearly without touching
+   the desktop layout. */
+@media (max-width: 700px) {
+  .sam-ui .fm-name { display: none; }
+  .sam-ui .fm-flag-chip { width: 6%; }
+  .sam-ui .fm-node { r: 50px; stroke-width: 2px; }
+  .sam-ui .fm-node-live { stroke-width: 3px; }
+  .sam-ui .fm-arc { stroke-width: 3; }
+  .sam-ui .fm-path { stroke-width: 2.6; }
+  .sam-ui .fm-path-live { stroke-width: 3.6; }
+  .sam-ui .fm-origin-ring { animation-name: sam-pulse-mobile; }
+  .sam-ui .fm-plane path { transform: scale(2.1); transform-origin: center; transform-box: fill-box; }
+}
+@keyframes sam-pulse-mobile { 0% { r: 20; opacity: 0.6; } 100% { r: 64; opacity: 0; } }
 
 /* ============================================================
    Journey — arrow-process steps (icon, title, short line)
@@ -436,6 +460,23 @@ html[data-theme='dark'] .sam-ui .hero-visual-glow {
 .sam-ui .chip:hover:not(:disabled) { border-color: var(--sam-ink-3); }
 .sam-ui .chip[aria-pressed='true'] { background: var(--sam-ink); border-color: var(--sam-ink); color: var(--sam-on-solid); font-weight: 600; }
 .sam-ui .chip:disabled { opacity: 0.35; cursor: not-allowed; }
+
+.sam-ui .seg {
+  display: flex; gap: 4px; width: 100%;
+  background: var(--sam-canvas-2); border: 1px solid var(--sam-line-2);
+  border-radius: var(--sam-r-full); padding: 4px;
+}
+.sam-ui .seg button {
+  flex: 1 1 0; border: none; border-radius: var(--sam-r-full);
+  background: transparent; color: var(--sam-ink-2);
+  font-size: 14px; font-weight: 600; letter-spacing: -0.01em;
+  padding: 10px 20px; cursor: pointer;
+  transition: all var(--sam-dur) var(--sam-ease);
+}
+.sam-ui .seg button:hover:not([aria-pressed='true']) { color: var(--sam-ink); }
+.sam-ui .seg button[aria-pressed='true'] {
+  background: var(--sam-ink); color: var(--sam-on-solid); box-shadow: var(--sam-shadow-soft);
+}
 
 .sam-ui .checkbox {
   display: flex; gap: 13px; align-items: flex-start;

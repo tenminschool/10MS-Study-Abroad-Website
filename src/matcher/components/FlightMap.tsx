@@ -16,12 +16,18 @@ import { Flag } from './Flag'
 // ============================================================
 
 const ORIGIN = { x: 110, y: 306 }
+const VIEW_W = 1160
+const VIEW_H = 400
 
-// SVG <text> can't render flag-icons' background-image spans, so flags are
-// drawn via a small foreignObject instead — sized to match the old fm-flag
-// text glyph's footprint.
-const FLAG_W = 26
-const FLAG_H = 20
+// SVG <text> can't render flag-icons' background-image spans, and
+// <foreignObject> is unreliable on mobile Safari — it doesn't consistently
+// pick up the viewBox's CSS scale factor, so flag chips can render at the
+// wrong size/position and spill out past the map. Flags are drawn as plain
+// HTML instead, absolutely positioned by percentage over the SVG so they
+// scale in lockstep with it on every browser.
+function pct(x: number, y: number) {
+  return { left: `${(x / VIEW_W) * 100}%`, top: `${(y / VIEW_H) * 100}%` }
+}
 
 // One coherent fan: every route bows the same way, curvature grows gently
 // with distance, and no arc loops back across another. `labelAbove` keeps
@@ -97,62 +103,66 @@ export function FlightMap() {
   }, [liveId, nodes.length])
 
   return (
-    <svg
-      className="flightmap"
-      viewBox="0 0 1160 400"
-      role="img"
-      aria-label={t('hero.mapAlt')}
-      preserveAspectRatio="xMidYMid meet"
-    >
-      <path className="fm-arc" d="M -40 372 Q 580 232 1200 372" />
+    <div className="flightmap-wrap">
+      <svg
+        className="flightmap"
+        viewBox={`0 0 ${VIEW_W} ${VIEW_H}`}
+        role="img"
+        aria-label={t('hero.mapAlt')}
+        preserveAspectRatio="xMidYMid meet"
+      >
+        <path className="fm-arc" d="M -40 372 Q 580 232 1200 372" />
 
-      {nodes.map(({ d, pos }) => (
-        <path
-          key={`p-${d.id}`}
-          className={`fm-path${d.id === liveId ? ' fm-path-live' : ''}`}
-          d={arc(pos)}
-        />
-      ))}
-
-      {/* Origin: Bangladesh, drawn like the destination nodes with a pulsing
-          home ring. */}
-      <circle className="fm-origin-ring" cx={ORIGIN.x} cy={ORIGIN.y} r="20" />
-      <circle className="fm-node fm-node-live" cx={ORIGIN.x} cy={ORIGIN.y} r="20" />
-      <foreignObject x={ORIGIN.x - FLAG_W / 2} y={ORIGIN.y - FLAG_H / 2} width={FLAG_W} height={FLAG_H}>
-        <div className="fm-flag-wrap">
-          <Flag emoji="🇧🇩" className="fm-flag-icon" />
-        </div>
-      </foreignObject>
-      <text className="fm-name" x={ORIGIN.x} y={ORIGIN.y + 36}>
-        {lang === 'bn' ? 'বাংলাদেশ' : 'Bangladesh'}
-      </text>
-
-      {nodes.map(({ d, pos }) => (
-        <g key={d.id}>
-          <circle
-            className={`fm-node${d.id === liveId ? ' fm-node-live' : ''}`}
-            cx={pos.x}
-            cy={pos.y}
-            r="20"
+        {nodes.map(({ d, pos }) => (
+          <path
+            key={`p-${d.id}`}
+            className={`fm-path${d.id === liveId ? ' fm-path-live' : ''}`}
+            d={arc(pos)}
           />
-          <foreignObject x={pos.x - FLAG_W / 2} y={pos.y - FLAG_H / 2} width={FLAG_W} height={FLAG_H}>
-            <div className="fm-flag-wrap">
-              <Flag emoji={d.flag} className="fm-flag-icon" />
-            </div>
-          </foreignObject>
-          <text
-            className="fm-name"
-            x={pos.x}
-            y={pos.labelAbove ? pos.y - 30 : pos.y + 36}
-          >
-            {d.name[lang]}
-          </text>
-        </g>
-      ))}
+        ))}
 
-      <g className="fm-plane" ref={planeRef} transform={`translate(${ORIGIN.x} ${ORIGIN.y})`}>
-        <path d="M 0 -7 L 8 6 L 0 2 L -8 6 Z" />
-      </g>
-    </svg>
+        {/* Origin: Bangladesh, drawn like the destination nodes with a pulsing
+            home ring. */}
+        <circle className="fm-origin-ring" cx={ORIGIN.x} cy={ORIGIN.y} r="20" />
+        <circle className="fm-node fm-node-live" cx={ORIGIN.x} cy={ORIGIN.y} r="20" />
+        <text className="fm-name" x={ORIGIN.x} y={ORIGIN.y + 36}>
+          {lang === 'bn' ? 'বাংলাদেশ' : 'Bangladesh'}
+        </text>
+
+        {nodes.map(({ d, pos }) => (
+          <g key={d.id}>
+            <circle
+              className={`fm-node${d.id === liveId ? ' fm-node-live' : ''}`}
+              cx={pos.x}
+              cy={pos.y}
+              r="20"
+            />
+            <text
+              className="fm-name"
+              x={pos.x}
+              y={pos.labelAbove ? pos.y - 30 : pos.y + 36}
+            >
+              {d.name[lang]}
+            </text>
+          </g>
+        ))}
+
+        <g className="fm-plane" ref={planeRef} transform={`translate(${ORIGIN.x} ${ORIGIN.y})`}>
+          <path d="M 0 -7 L 8 6 L 0 2 L -8 6 Z" />
+        </g>
+      </svg>
+
+      {/* Flag chips drawn as HTML, positioned by percentage over the SVG
+          rather than inside a <foreignObject>, so they scale in lockstep
+          with the map on every browser (see note above). */}
+      <div className="fm-flag-chip" style={pct(ORIGIN.x, ORIGIN.y)}>
+        <Flag emoji="🇧🇩" className="fm-flag-icon" />
+      </div>
+      {nodes.map(({ d, pos }) => (
+        <div key={`flag-${d.id}`} className="fm-flag-chip" style={pct(pos.x, pos.y)}>
+          <Flag emoji={d.flag} className="fm-flag-icon" />
+        </div>
+      ))}
+    </div>
   )
 }
