@@ -1,13 +1,14 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
+import { X } from '@phosphor-icons/react';
 import HomeHero from '../components/HomeHero';
 import CountryCarousel from '../components/CountryCarousel';
 import Carousel from '../components/Carousel';
 import { Flag } from '../components/Flag';
 import { YouTubeFacade } from '../components/YouTubeFacade';
-import type { Testimonial } from '../lib/testimonials';
+import type { Testimonial, TextTestimonial } from '../lib/testimonials';
 import './page.css';
 
 interface CountrySectionProps {
@@ -69,7 +70,35 @@ function TestimonialAvatar({ name, avatar }: { name: string; avatar?: string }) 
   );
 }
 
-function TestimonialCard({ testimonial, tabIndex, ariaHidden }: { testimonial: Testimonial; tabIndex: number; ariaHidden: boolean }) {
+function TestimonialCard({
+  testimonial,
+  tabIndex,
+  ariaHidden,
+  onReadMore,
+  readMoreLabel,
+}: {
+  testimonial: Testimonial;
+  tabIndex: number;
+  ariaHidden: boolean;
+  onReadMore: (testimonial: TextTestimonial) => void;
+  readMoreLabel: string;
+}) {
+  const quoteRef = useRef<HTMLParagraphElement>(null);
+  const [isClamped, setIsClamped] = useState(false);
+
+  useEffect(() => {
+    if (testimonial.type !== 'text') return;
+    const el = quoteRef.current;
+    if (!el) return;
+
+    const measure = () => setIsClamped(el.scrollHeight - el.clientHeight > 1);
+    measure();
+
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [testimonial]);
+
   return (
     <div
       className={`testimonial-card-restyle${testimonial.type === 'video' ? ' testimonial-card-video' : ''}`}
@@ -93,13 +122,93 @@ function TestimonialCard({ testimonial, tabIndex, ariaHidden }: { testimonial: T
               <p className="test-student-uni">{testimonial.university}</p>
             </div>
           </div>
-          <p className="test-card-quote">"{testimonial.quote}"</p>
+          <p className="test-card-quote" ref={quoteRef}>"{testimonial.quote}"</p>
+          {isClamped && (
+            <button
+              type="button"
+              className="test-read-more-btn"
+              tabIndex={tabIndex}
+              onClick={() => onReadMore(testimonial)}
+            >
+              {readMoreLabel}
+            </button>
+          )}
         </>
       )}
       <div className="test-card-footer">
         <span className="test-card-country-badge">
           <Flag emoji={testimonial.countryFlag} /> {testimonial.countryName}
         </span>
+      </div>
+    </div>
+  );
+}
+
+function TestimonialQuoteModal({
+  testimonial,
+  closeLabel,
+  onClose,
+}: {
+  testimonial: TextTestimonial;
+  closeLabel: string;
+  onClose: () => void;
+}) {
+  const closeBtnRef = useRef<HTMLButtonElement>(null);
+  const titleId = `test-quote-modal-title-${testimonial.name.replace(/\s+/g, '-')}`;
+
+  useEffect(() => {
+    const previouslyFocused = document.activeElement as HTMLElement | null;
+    closeBtnRef.current?.focus();
+
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', onKeyDown);
+
+    return () => {
+      window.removeEventListener('keydown', onKeyDown);
+      document.body.style.overflow = originalOverflow;
+      previouslyFocused?.focus();
+    };
+  }, [onClose]);
+
+  return (
+    <div
+      className="test-quote-modal-overlay"
+      onClick={onClose}
+    >
+      <div
+        className="test-quote-modal-card"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={titleId}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <button
+          type="button"
+          ref={closeBtnRef}
+          className="test-quote-modal-close"
+          aria-label={closeLabel}
+          onClick={onClose}
+        >
+          <X size={18} weight="bold" />
+        </button>
+        <div className="test-card-top-row">
+          <TestimonialAvatar name={testimonial.name} avatar={testimonial.avatar} />
+          <div className="test-student-meta">
+            <h4 className="test-student-name" id={titleId}>{testimonial.name}</h4>
+            <p className="test-student-uni">{testimonial.university}</p>
+          </div>
+        </div>
+        <p className="test-quote-modal-quote">&ldquo;{testimonial.quote}&rdquo;</p>
+        <div className="test-card-footer">
+          <span className="test-card-country-badge">
+            <Flag emoji={testimonial.countryFlag} /> {testimonial.countryName}
+          </span>
+        </div>
       </div>
     </div>
   );
@@ -113,6 +222,8 @@ function TestimonialsSection({ lang, testimonials }: CountrySectionProps & { tes
       prev: "আগের গল্প",
       next: "পরের গল্প",
       ariaLabel: "শিক্ষার্থীদের অভিজ্ঞতার ক্যারোসেল",
+      readMore: "আরও পড়ুন",
+      close: "বন্ধ করুন",
     },
     en: {
       heading: "Student Experiences",
@@ -120,10 +231,13 @@ function TestimonialsSection({ lang, testimonials }: CountrySectionProps & { tes
       prev: "Previous story",
       next: "Next story",
       ariaLabel: "Student testimonials carousel",
+      readMore: "Read more",
+      close: "Close",
     }
   };
 
   const currentTranslations = lang === 'bn' ? t.bn : t.en;
+  const [activeQuote, setActiveQuote] = useState<TextTestimonial | null>(null);
 
   if (testimonials.length === 0) {
     return null;
@@ -141,13 +255,27 @@ function TestimonialsSection({ lang, testimonials }: CountrySectionProps & { tes
           items={testimonials}
           getKey={(_, i) => String(i)}
           renderItem={(testimonial, meta) => (
-            <TestimonialCard testimonial={testimonial} tabIndex={meta.tabIndex} ariaHidden={meta.ariaHidden} />
+            <TestimonialCard
+              testimonial={testimonial}
+              tabIndex={meta.tabIndex}
+              ariaHidden={meta.ariaHidden}
+              onReadMore={setActiveQuote}
+              readMoreLabel={currentTranslations.readMore}
+            />
           )}
           ariaLabel={currentTranslations.ariaLabel}
           prevLabel={currentTranslations.prev}
           nextLabel={currentTranslations.next}
         />
       </div>
+
+      {activeQuote && (
+        <TestimonialQuoteModal
+          testimonial={activeQuote}
+          closeLabel={currentTranslations.close}
+          onClose={() => setActiveQuote(null)}
+        />
+      )}
     </section>
   );
 }
