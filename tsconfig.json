@@ -30,5 +30,5 @@
     ".next/dev/types/**/*.ts",
     "**/*.mts"
   ],
-  "exclude": ["node_modules", "study-abroad-matcher", "study-abroad-matcher-old"]
+  "exclude": ["node_modules", ".open-next", ".wrangler", "study-abroad-matcher", "study-abroad-matcher-old"]
 }

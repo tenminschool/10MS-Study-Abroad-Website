@@ -2,9 +2,12 @@
 // POST /api/lead
 //
 // Ported from study-abroad-matcher/functions/api/lead.ts (a Cloudflare
-// Pages Function) to a Next.js edge route handler — same logic, same
-// env var names, running on the Edge runtime so the Web Crypto /
-// btoa/atob calls below behave identically to the original.
+// Pages Function) to a Next.js route handler — same logic, same env var
+// names. Runs on the default Node.js runtime, NOT `runtime = 'edge'`:
+// @opennextjs/cloudflare (how this app is deployed) does not support the
+// Edge runtime. The Web Crypto / btoa / atob calls below still behave
+// exactly as in the original because the deploy target is workerd, which
+// exposes crypto.subtle, btoa and atob as globals either way.
 //
 // 1. Verifies Turnstile (if configured)
 // 2. Re-runs the matching engine server-side — the student cannot
@@ -18,8 +21,6 @@
 
 import { matchStudent } from '../../../matcher/engine/match';
 import type { MatchOutput, StudentProfile } from '../../../matcher/engine/types';
-
-export const runtime = 'edge';
 
 interface Body {
   status: 'partial' | 'complete';

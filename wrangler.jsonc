@@ -1,0 +1,46 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+
+  // MUST match the Worker that Cloudflare Workers Builds deploys to. Workers Builds
+  // overrides the uploaded script name but NOT the WORKER_SELF_REFERENCE target below,
+  // so a mismatch here fails the deploy with "Worker ... was not found" [code: 10143].
+  "name": "10ms-study-abroad",
+
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2026-08-04",
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+
+  // Deliberately off — do not let a generated config turn these back on.
+  "workers_dev": false,
+  "preview_urls": false,
+
+  "observability": {
+    "enabled": true
+  },
+
+  // Lets the Worker call itself, which ISR revalidation needs (/, /destinations
+  // and /scholarships all revalidate on a 1m window). Keep in sync with "name".
+  "services": [
+    {
+      "binding": "WORKER_SELF_REFERENCE",
+      "service": "10ms-study-abroad"
+    }
+  ],
+
+  "r2_buckets": [
+    {
+      "binding": "NEXT_INC_CACHE_R2_BUCKET",
+      "bucket_name": "study-abroad-opennext-cache"
+    }
+  ]
+
+  // No "vars" block on purpose: GOOGLE_SA_EMAIL, GOOGLE_SA_PRIVATE_KEY, SHEET_ID and
+  // SHEET_TAB are Worker *secrets*, set out-of-band with `wrangler secret put`. Secrets
+  // are not managed by this file, so a deploy can never wipe them and they never end up
+  // in git or in a build log. See CLAUDE.md → Deployment.
+}
