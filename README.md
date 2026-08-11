@@ -111,6 +111,3 @@ mirror into `.dev.vars` (gitignored) for `npm run preview`. Never add them to `w
   generation scripts, not part of the build — historical/manual tools only.
 - `md/design.md` is 10 Minute School's brand/design reference — not wired into the build, but the source of truth
   for any visual/UI work.
-
-See [`CLAUDE.md`](CLAUDE.md) for the full architectural writeup, including the lead-capture flow and every
-deployment gotcha in detail.
