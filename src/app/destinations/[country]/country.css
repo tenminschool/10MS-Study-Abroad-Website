@@ -562,6 +562,21 @@
   object-fit: cover;
 }
 
+.test-avatar-circle {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--ten-red) 0%, var(--ten-red-dark) 100%);
+  color: var(--ten-white);
+  font-weight: 700;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 4px 10px rgba(229, 50, 45, 0.2);
+}
+
 .test-student-name {
   font-size: 14px;
   font-weight: 700;

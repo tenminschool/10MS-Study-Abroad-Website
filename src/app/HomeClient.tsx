@@ -7,6 +7,7 @@ import HomeHero from '../components/HomeHero';
 import CountryCarousel from '../components/CountryCarousel';
 import Carousel from '../components/Carousel';
 import { Flag } from '../components/Flag';
+import { TestimonialAvatar } from '../components/TestimonialAvatar';
 import { YouTubeFacade } from '../components/YouTubeFacade';
 import type { Testimonial, TextTestimonial } from '../lib/testimonials';
 import './page.css';
@@ -45,28 +46,6 @@ function CountrySection({ lang }: CountrySectionProps) {
         <CountryCarousel lang={lang} />
       </div>
     </section>
-  );
-}
-
-function TestimonialAvatar({ name, avatar }: { name: string; avatar?: string }) {
-  const [broken, setBroken] = useState(false);
-  const initials = name
-    .split(' ')
-    .map((n: string) => n[0])
-    .join('')
-    .slice(0, 2)
-    .toUpperCase();
-
-  if (!avatar || broken) {
-    return <div className="test-avatar-circle">{initials}</div>;
-  }
-  return (
-    <img
-      src={avatar}
-      alt={name}
-      className="test-avatar-img"
-      onError={() => setBroken(true)}
-    />
   );
 }
 
