@@ -52,11 +52,15 @@ This is the biggest trap in the codebase — there is no single source of truth 
 
 1. `src/data/destinations.ts` — static TS data, used by `/destinations/[country]/**` (country/university/program
    detail pages) via direct import.
-2. `src/lib/fetchSheetData.ts` (`fetchSheet(tabName)`) — fetches a public Google Sheet (by `SHEET_ID`) as JSON via the
-   `gviz/tq` endpoint at request time, remaps headers through `keyMappings`, and is imported by three server
+2. `src/lib/fetchSheetData.ts` (`fetchSheet(tabName)` / `fetchSheetSafe(tabName, fallback)`) — reads a **private**
+   Google Sheet through the Sheets API v4 `values` endpoint, authenticated with the service account
+   (`src/lib/googleAuth.ts`), remaps headers through `keyMappings`, and is imported by three server
    components — `src/app/page.tsx`, `src/app/destinations/page.tsx` (the listing page), and
    `src/app/scholarships/page.tsx` — but not by the `/destinations/[country]/**` detail pages, which use
-   `src/data/destinations.ts` instead.
+   `src/data/destinations.ts` instead. Those three pages call `fetchSheetSafe`, not `fetchSheet`: they are
+   statically prerendered, so a throw here fails `next build` outright and blocks every deploy. Passing a
+   fallback (static `destinations`, or `[]` for tabs with no static equivalent) keeps a content-sheet outage
+   from gating unrelated code changes; the failure is `console.error`-ed loudly instead.
 3. `src/matcher/data/destinations/*.json` — per-country research files (rules, costs, visa, scholarships) consumed
    only by the matcher engine, normalised through `matcher/engine/normalise.ts` and registered in
    `matcher/data/index.ts`.
@@ -147,10 +151,17 @@ Three things to keep straight when touching any of this:
   `npx wrangler secret put <NAME>`; mirror them into a local `.dev.vars` (gitignored) for `npm run preview`.
   `SHEET_ID` is a secret only on the lead-capture path — `src/app/api/lead/route.ts` reads `process.env.SHEET_ID`
   for the Leads spreadsheet. The content sheet behind the home/destinations/scholarships pages does not use it: its
-  ID is a plain hardcoded literal at `src/lib/fetchSheetData.ts:1` (that sheet is published read-only, so it is not
-  a secret). Two independent sources of truth — setting or rotating the `SHEET_ID` secret does not change what
-  `fetchSheet()` reads, and editing the literal does not change where leads are written. If either spreadsheet
-  moves, update both.
+  ID is a plain hardcoded literal in `src/lib/fetchSheetData.ts` (the ID is not sensitive; the sheet is private and
+  access is controlled by sharing it with the service account). Two independent sources of truth — setting or
+  rotating the `SHEET_ID` secret does not change what `fetchSheet()` reads, and editing the literal does not change
+  where leads are written. If either spreadsheet moves, update both.
+- **`GOOGLE_SA_EMAIL` / `GOOGLE_SA_PRIVATE_KEY` are needed at BUILD time, not just at runtime.** The home,
+  destinations and scholarships pages are statically prerendered, so they read the content sheet during
+  `next build`. On Vercel, project environment variables are already available to builds. On Cloudflare, Worker
+  secrets set with `npx wrangler secret put` are **runtime-only** and are *not* injected into the Workers Builds
+  build step — the same two values must also be added under the Worker's Settings → Build → Variables and Secrets.
+  Locally, `.env.local` covers `next build`/`next dev` and `.dev.vars` covers `npm run preview`. Both spreadsheets
+  must be shared with the service-account email (Viewer is enough for the content sheet).
 - **`workers_dev` and `preview_urls` are deliberately `false`.** Generated configs turn them back on.
 
 Commands: `npm run build:worker` (build the Worker bundle), `npm run preview` (run it locally in workerd),

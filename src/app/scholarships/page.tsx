@@ -1,5 +1,6 @@
 import React from 'react';
-import { fetchSheet } from '@/lib/fetchSheetData';
+import { fetchSheetSafe } from '@/lib/fetchSheetData';
+import { destinations as staticDestinations } from '@/data/destinations';
 import ScholarshipsClient from './ScholarshipsClient';
 
 export const metadata = {
@@ -8,9 +9,10 @@ export const metadata = {
 };
 
 export default async function Page() {
-  // Fetch from Google Sheet
-  const scholarshipsRaw = await fetchSheet("Scholarships");
-  const destinations = await fetchSheet("Destinations");
+  // Fetch from Google Sheet. Scholarships have no static fallback; ScholarshipsClient
+  // renders an empty state when the list is empty.
+  const scholarshipsRaw = await fetchSheetSafe("Scholarships");
+  const destinations = await fetchSheetSafe("Destinations", staticDestinations);
 
   const scholarships = scholarshipsRaw.map((schol: any) => {
     // Match with destination to get slug, name, flag

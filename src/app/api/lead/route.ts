@@ -21,6 +21,7 @@
 
 import { matchStudent } from '../../../matcher/engine/match';
 import type { MatchOutput, StudentProfile } from '../../../matcher/engine/types';
+import { getAccessToken, sheetValuesUrl as api } from '../../../lib/googleAuth';
 
 interface Body {
   status: 'partial' | 'complete';
@@ -46,80 +47,12 @@ const HEADERS = [
 ];
 
 // ------------------------------------------------------------
-// Google service account auth (RS256 JWT → access token)
-// ------------------------------------------------------------
-
-function b64url(data: ArrayBuffer | string): string {
-  const bytes =
-    typeof data === 'string' ? new TextEncoder().encode(data) : new Uint8Array(data);
-  let s = '';
-  for (const b of bytes) s += String.fromCharCode(b);
-  return btoa(s).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
-}
-
-function pemToArrayBuffer(pem: string): ArrayBuffer {
-  const body = pem
-    .replace(/-----BEGIN [^-]+-----/, '')
-    .replace(/-----END [^-]+-----/, '')
-    .replace(/\s+/g, '');
-  const bin = atob(body);
-  const buf = new Uint8Array(bin.length);
-  for (let i = 0; i < bin.length; i++) buf[i] = bin.charCodeAt(i);
-  return buf.buffer;
-}
-
-async function getAccessToken(): Promise<string> {
-  const email = process.env.GOOGLE_SA_EMAIL!;
-  const privateKey = process.env.GOOGLE_SA_PRIVATE_KEY!;
-
-  const now = Math.floor(Date.now() / 1000);
-  const header = b64url(JSON.stringify({ alg: 'RS256', typ: 'JWT' }));
-  const claims = b64url(
-    JSON.stringify({
-      iss: email,
-      scope: 'https://www.googleapis.com/auth/spreadsheets',
-      aud: 'https://oauth2.googleapis.com/token',
-      exp: now + 3600,
-      iat: now,
-    }),
-  );
-  const unsigned = `${header}.${claims}`;
-
-  // Env vars store newlines as literal \n.
-  const pem = privateKey.replace(/\\n/g, '\n');
-  const key = await crypto.subtle.importKey(
-    'pkcs8',
-    pemToArrayBuffer(pem),
-    { name: 'RSASSA-PKCS1-v1_5', hash: 'SHA-256' },
-    false,
-    ['sign'],
-  );
-  const sig = await crypto.subtle.sign(
-    'RSASSA-PKCS1-v1_5',
-    key,
-    new TextEncoder().encode(unsigned),
-  );
-  const jwt = `${unsigned}.${b64url(sig)}`;
-
-  const res = await fetch('https://oauth2.googleapis.com/token', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: new URLSearchParams({
-      grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
-      assertion: jwt,
-    }),
-  });
-  if (!res.ok) throw new Error(`token ${res.status}: ${await res.text()}`);
-  const json = (await res.json()) as { access_token: string };
-  return json.access_token;
-}
-
-// ------------------------------------------------------------
 // Sheets helpers
+//
+// Service-account auth (RS256 JWT → access token) lives in src/lib/googleAuth.ts
+// so the content-fetching path can share it. getAccessToken() defaults to the
+// read/write spreadsheets scope this route needs.
 // ------------------------------------------------------------
-
-const api = (id: string, path: string) =>
-  `https://sheets.googleapis.com/v4/spreadsheets/${id}/values/${encodeURIComponent(path)}`;
 
 async function ensureHeaders(sheetId: string, token: string, tab: string) {
   const res = await fetch(`${api(sheetId, `${tab}!A1:BZ1`)}`, {

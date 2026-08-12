@@ -1,6 +1,7 @@
 import React from 'react';
 import HomeClient from './HomeClient';
-import { fetchSheet } from '@/lib/fetchSheetData';
+import { fetchSheetSafe } from '@/lib/fetchSheetData';
+import { destinations as staticDestinations } from '@/data/destinations';
 import { getHomeTestimonials } from '@/lib/testimonials';
 
 export const metadata = {
@@ -9,9 +10,11 @@ export const metadata = {
 };
 
 export default async function Page() {
+  // Testimonials have no static fallback; HomeClient hides the section when
+  // the list is empty, so an unreachable sheet costs the carousel, not the page.
   const [testimonialRows, destinationRows] = await Promise.all([
-    fetchSheet('Testimonials'),
-    fetchSheet('Destinations'),
+    fetchSheetSafe('Testimonials'),
+    fetchSheetSafe('Destinations', staticDestinations),
   ]);
   const testimonials = getHomeTestimonials(testimonialRows, destinationRows);
 

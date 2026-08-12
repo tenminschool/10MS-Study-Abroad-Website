@@ -1,5 +1,6 @@
 import React from 'react';
-import { fetchSheet } from '@/lib/fetchSheetData';
+import { fetchSheetSafe } from '@/lib/fetchSheetData';
+import { destinations as staticDestinations } from '@/data/destinations';
 import DestinationsClient from './DestinationsClient';
 
 export const metadata = {
@@ -8,6 +9,8 @@ export const metadata = {
 };
 
 export default async function Page() {
-  const destinations = await fetchSheet("Destinations");
+  // The static dataset's field names match what keyMappings produces, so it is
+  // a drop-in if the sheet is unreachable.
+  const destinations = await fetchSheetSafe("Destinations", staticDestinations);
   return <DestinationsClient destinations={destinations} />;
 }
