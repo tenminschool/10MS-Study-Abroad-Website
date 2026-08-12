@@ -32,7 +32,6 @@ export default function Footer() {
         <div className="footer-links-grid">
           <div className="footer-col">
             <h3>Support</h3>
-            <Link href="/contact">Contact Us</Link>
             <Link href="/privacy">Privacy Policy</Link>
             <Link href="/terms">Terms of Service</Link>
           </div>

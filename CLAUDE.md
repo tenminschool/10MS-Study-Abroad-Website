@@ -33,7 +33,7 @@ may have breaking API changes. Before using an unfamiliar Next.js API, check `no
 ### Two parallel apps under one router
 
 - `src/app/**` — the marketing site: home, `/destinations`, `/destinations/[country]/[university]/[program]`,
-  `/programs`, `/scholarships`, `/resources`, `/compare`, `/contact`, legal pages. Server components by
+  `/programs`, `/scholarships`, `/resources`, `/compare`, legal pages. Server components by
   default; pages needing interactivity delegate to a colocated `*Client.tsx` component (e.g. `HomeClient.tsx`,
   `DestinationsClient.tsx`, `ScholarshipsClient.tsx`).
 - `src/matcher/**` — a self-contained "destination matcher" module (originally a separate app called

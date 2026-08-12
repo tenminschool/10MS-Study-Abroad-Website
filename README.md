@@ -45,7 +45,7 @@ Two largely independent trees live under one router — don't assume shared conv
 ```text
 src/
 ├── app/            # marketing site: home, /destinations, /programs, /scholarships,
-│                   # /resources, /compare, /contact, legal pages, and the lead-capture API route
+│                   # /resources, /compare, legal pages, and the lead-capture API route
 ├── components/     # shared UI for the main site (Navbar, Footer, Carousel, Flag, ...)
 ├── data/           # static destination data used by /destinations/[country]/** detail pages
 ├── lib/            # fetchSheetData.ts (Google Sheet → JSON at request time), testimonials

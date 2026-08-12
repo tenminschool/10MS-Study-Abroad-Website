@@ -68,7 +68,8 @@ export default function TermsPage() {
           <section>
             <h2>7. Contact Us</h2>
             <p>
-              Questions about these terms? Reach out via our <a href="/contact">Contact page</a>.
+              Questions about these terms? Email us at{' '}
+              <a href="mailto:support@10minuteschool.com">support@10minuteschool.com</a>.
             </p>
           </section>
         </div>

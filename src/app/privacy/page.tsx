@@ -69,8 +69,8 @@ export default function PrivacyPage() {
           <section>
             <h2>7. Contact Us</h2>
             <p>
-              If you have questions about this Privacy Policy, reach out via our{' '}
-              <a href="/contact">Contact page</a>.
+              If you have questions about this Privacy Policy, email us at{' '}
+              <a href="mailto:support@10minuteschool.com">support@10minuteschool.com</a>.
             </p>
           </section>
         </div>
