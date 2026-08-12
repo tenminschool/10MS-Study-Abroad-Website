@@ -539,65 +539,6 @@
   top: 7px;
 }
 
-/* Testimonials */
-.testimonial-item-card {
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 20px;
-  background: var(--surface-card);
-  margin-bottom: 16px;
-}
-
-.test-header-wrap {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 14px;
-}
-
-.test-avatar-img {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  object-fit: cover;
-}
-
-.test-avatar-circle {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--ten-red) 0%, var(--ten-red-dark) 100%);
-  color: var(--ten-white);
-  font-weight: 700;
-  font-size: 1rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  box-shadow: 0 4px 10px rgba(229, 50, 45, 0.2);
-}
-
-.test-student-name {
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--fg-1);
-  margin: 0;
-}
-
-.test-student-uni {
-  font-size: 12px;
-  color: var(--fg-3);
-  margin: 2px 0 0 0;
-}
-
-.test-quote-text {
-  font-size: 14px;
-  color: var(--fg-2);
-  line-height: 1.6;
-  font-style: italic;
-  margin: 0;
-}
-
 /* Sidebar Components */
 .sidebar-counseling-card {
   background: var(--surface-card);

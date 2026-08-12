@@ -3,7 +3,6 @@ import { destinations, universities } from '../../../data/destinations';
 import Link from 'next/link';
 import { MapPin, CurrencyDollar, BookOpen, Clock, CaretRight, GraduationCap, Medal, Calendar, Briefcase, Users, CheckCircle, ChartBar } from '@phosphor-icons/react/ssr';
 import { Flag } from '../../../components/Flag';
-import { TestimonialAvatar } from '../../../components/TestimonialAvatar';
 import './country.css';
 
 export async function generateMetadata({ params }: { params: Promise<{ country: string }> }) {
@@ -233,27 +232,6 @@ export default async function CountryPage({ params }: { params: Promise<{ countr
               <div className="content-section-card">
                 <h2 className="section-title-custom">Visa Overview</h2>
                 <p className="text-sm text-[var(--fg-2)] leading-relaxed">{country.visa_description}</p>
-              </div>
-            )}
-
-            {/* Student Testimonials */}
-            {country.testimonials && country.testimonials.length > 0 && (
-              <div className="content-section-card">
-                <h2 className="section-title-custom">Student Testimonials</h2>
-                <div>
-                  {country.testimonials.map((test, idx) => (
-                    <div key={idx} className="testimonial-item-card">
-                      <div className="test-header-wrap">
-                        <TestimonialAvatar name={test.name} avatar={test.avatar} />
-                        <div>
-                          <h4 className="test-student-name">{test.name}</h4>
-                          <p className="test-student-uni">{test.university}</p>
-                        </div>
-                      </div>
-                      <p className="test-quote-text">"{test.quote}"</p>
-                    </div>
-                  ))}
-                </div>
               </div>
             )}
 
