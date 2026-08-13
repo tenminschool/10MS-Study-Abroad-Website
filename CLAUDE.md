@@ -52,15 +52,22 @@ This is the biggest trap in the codebase — there is no single source of truth 
 
 1. `src/data/destinations.ts` — static TS data, used by `/destinations/[country]/**` (country/university/program
    detail pages) via direct import.
-2. `src/lib/fetchSheetData.ts` (`fetchSheet(tabName)` / `fetchSheetSafe(tabName, fallback)`) — reads a **private**
-   Google Sheet through the Sheets API v4 `values` endpoint, authenticated with the service account
-   (`src/lib/googleAuth.ts`), remaps headers through `keyMappings`, and is imported by three server
-   components — `src/app/page.tsx`, `src/app/destinations/page.tsx` (the listing page), and
-   `src/app/scholarships/page.tsx` — but not by the `/destinations/[country]/**` detail pages, which use
-   `src/data/destinations.ts` instead. Those three pages call `fetchSheetSafe`, not `fetchSheet`: they are
-   statically prerendered, so a throw here fails `next build` outright and blocks every deploy. Passing a
-   fallback (static `destinations`, or `[]` for tabs with no static equivalent) keeps a content-sheet outage
-   from gating unrelated code changes; the failure is `console.error`-ed loudly instead.
+2. `src/lib/fetchSheetData.ts` (`fetchSheet(tabName)` / `fetchSheetSafe(tabName, fallback)`) — reads the content
+   Google Sheet, remaps headers through `keyMappings`, and is imported by three server components —
+   `src/app/page.tsx`, `src/app/destinations/page.tsx` (the listing page), and `src/app/scholarships/page.tsx` —
+   but not by the `/destinations/[country]/**` detail pages, which use `src/data/destinations.ts` instead. Those
+   three pages call `fetchSheetSafe`, not `fetchSheet`: they are statically prerendered, so a throw here fails
+   `next build` outright and blocks every deploy. Passing a fallback (static `destinations`, or `[]` for tabs with
+   no static equivalent) keeps a content-sheet outage from gating unrelated code changes; the failure is
+   `console.error`-ed loudly instead.
+
+   **Transport is currently TEMPORARY**, reverted to the pre-authenticated, unauthenticated public `gviz/tq`
+   endpoint (the sheet must be shared "Anyone with the link → Viewer"). The proper transport — Sheets API v4
+   `values`, authenticated with the service account via `src/lib/googleAuth.ts` — is what shipped in commit
+   `1b5bb5f` and is what this should revert back to once Cloudflare's Worker has `GOOGLE_SA_EMAIL` /
+   `GOOGLE_SA_PRIVATE_KEY` configured under Settings → Build → Variables and Secrets (see Deployment below for
+   why that step matters, and why `wrangler secret put` alone isn't enough). Until then, the whole spreadsheet —
+   every tab, including any unapproved testimonial rows — is publicly readable by anyone with the sheet ID.
 3. `src/matcher/data/destinations/*.json` — per-country research files (rules, costs, visa, scholarships) consumed
    only by the matcher engine, normalised through `matcher/engine/normalise.ts` and registered in
    `matcher/data/index.ts`.
@@ -155,13 +162,19 @@ Three things to keep straight when touching any of this:
   access is controlled by sharing it with the service account). Two independent sources of truth — setting or
   rotating the `SHEET_ID` secret does not change what `fetchSheet()` reads, and editing the literal does not change
   where leads are written. If either spreadsheet moves, update both.
-- **`GOOGLE_SA_EMAIL` / `GOOGLE_SA_PRIVATE_KEY` are needed at BUILD time, not just at runtime.** The home,
-  destinations and scholarships pages are statically prerendered, so they read the content sheet during
-  `next build`. On Vercel, project environment variables are already available to builds. On Cloudflare, Worker
-  secrets set with `npx wrangler secret put` are **runtime-only** and are *not* injected into the Workers Builds
-  build step — the same two values must also be added under the Worker's Settings → Build → Variables and Secrets.
-  Locally, `.env.local` covers `next build`/`next dev` and `.dev.vars` covers `npm run preview`. Both spreadsheets
-  must be shared with the service-account email (Viewer is enough for the content sheet).
+- **`GOOGLE_SA_EMAIL` / `GOOGLE_SA_PRIVATE_KEY` are needed at BUILD time, not just at runtime, for anything that
+  reads the content sheet with the service-account transport.** The home, destinations and scholarships pages are
+  statically prerendered, so a build-time read would happen during `next build`. On Vercel, project environment
+  variables are already available to builds. On Cloudflare, Worker secrets set with `npx wrangler secret put` are
+  **runtime-only** and are *not* injected into the Workers Builds build step — the same two values must also be
+  added under the Worker's Settings → Build → Variables and Secrets. This is exactly the gap that made testimonials
+  (and, silently, the rest of the content sheet) disappear on Cloudflare while Vercel kept working — which is why
+  `fetchSheetData.ts`'s content-read transport is currently reverted to the public `gviz/tq` endpoint as a stopgap
+  (see the data-sources section above). These two vars are still required for `src/app/api/lead/route.ts`'s
+  Leads-sheet write — but that route is dynamic, not prerendered, so it only needs them at *runtime*, which
+  `wrangler secret put` already covers; it's unaffected by the content-read stopgap either way. Locally, `.env.local`
+  covers `next build`/`next dev` and `.dev.vars` covers `npm run preview`. Both spreadsheets must be shared with
+  the service-account email (Viewer is enough for the content sheet) regardless of which transport is active.
 - **`workers_dev` and `preview_urls` are deliberately `false`.** Generated configs turn them back on.
 
 Commands: `npm run build:worker` (build the Worker bundle), `npm run preview` (run it locally in workerd),

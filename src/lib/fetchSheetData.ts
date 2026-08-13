@@ -1,5 +1,3 @@
-import { getAccessToken, sheetValuesUrl, SCOPE_SHEETS_READONLY } from './googleAuth';
-
 // The CONTENT spreadsheet (countries, scholarships, testimonials). Deliberately
 // a literal and NOT process.env.SHEET_ID — that env var points at the separate
 // *Leads* spreadsheet used by src/app/api/lead/route.ts. Two independent
@@ -73,6 +71,17 @@ function splitStringToArray(val: any): string[] {
   return [str];
 }
 
+// TEMPORARY: reads the public gviz/tq endpoint instead of the authenticated Sheets
+// API v4 transport (see commit 1b5bb5f for that version). Cloudflare Workers Builds
+// doesn't get GOOGLE_SA_EMAIL/GOOGLE_SA_PRIVATE_KEY at *build* time unless they're
+// also added under the Worker's Settings -> Build -> Variables and Secrets (wrangler
+// secret put alone only makes them available at runtime) — that step hadn't been
+// done, so the content pages silently lost their sheet data (and testimonials, which
+// has no static fallback, disappeared entirely) on Cloudflare while Vercel worked
+// fine. Reverted to the old public transport as a stopgap; this requires the content
+// spreadsheet to be shared "Anyone with the link -> Viewer." Once the Cloudflare
+// build vars are configured, re-restrict the sheet and restore the commit-1b5bb5f
+// service-account transport.
 export async function fetchSheet(tabName: string) {
   // Tabs with leading/trailing spaces in spreadsheet
   let queryTab = tabName;
@@ -82,43 +91,32 @@ export async function fetchSheet(tabName: string) {
 
   // Most tabs reserve row 1 and put headers on row 2; a few have headers on row 1 instead.
   const headerOnRow1Tabs = ['Testimonials'];
-  const cells = headerOnRow1Tabs.includes(tabName) ? 'A1:Z' : 'A2:Z';
-  // Single quotes are required around the tab name — the Scholarships tab is
-  // literally named " Scholarships " with leading/trailing spaces.
-  const url = sheetValuesUrl(SHEET_ID, `'${queryTab}'!${cells}`);
+  const range = headerOnRow1Tabs.includes(tabName) ? 'A1:Z' : 'A2:Z';
+  const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(queryTab)}&range=${range}&headers=1`;
 
   const isDev = process.env.NODE_ENV === 'development';
   const fetchOptions = isDev
     ? { cache: 'no-store' as const }
     : { next: { revalidate: 60 } };
 
-  const token = await getAccessToken(SCOPE_SHEETS_READONLY);
-  const res = await fetch(url, {
-    ...fetchOptions,
-    headers: { Authorization: `Bearer ${token}` },
-  });
+  const res = await fetch(url, fetchOptions);
   if (!res.ok) {
-    // Include the status code and body — `statusText` alone renders as a bare
-    // "Unauthorized", which made a sheet-permission outage hard to diagnose.
-    const body = await res.text().catch(() => '');
-    throw new Error(
-      `Failed to fetch sheet ${tabName}: ${res.status} ${res.statusText} ${body.slice(0, 300)}`.trim(),
-    );
+    throw new Error(`Failed to fetch sheet ${tabName}: ${res.statusText}`);
   }
+  const text = await res.text();
 
-  // FORMATTED_VALUE (the default renderOption) returns every cell as a string.
-  const json = (await res.json()) as { values?: string[][] };
-  const values = json.values ?? [];
-  if (values.length === 0) return [];
+  // Extract JSON string from visualization envelope (e.g. google.visualization.Query.setResponse(...))
+  const jsonText = text.substring(47).slice(0, -2);
+  const json = JSON.parse(jsonText);
 
-  const headers = values[0].map((label) => cleanKey(String(label ?? '')));
+  const headers = json.table.cols.map((col: any) => cleanKey(col.label));
 
-  const rows = values.slice(1).map((row) => {
+  const rows = json.table.rows.map((row: any) => {
     const obj: any = {};
     headers.forEach((header: string, i: number) => {
       if (!header) return;
-      // The Sheets API truncates trailing empty cells, so short rows are normal.
-      const val = row[i] ?? "";
+      const cell = row.c?.[i];
+      const val = cell?.v ?? "";
 
       // Parse specific fields to match codebase expectations
       if (header === 'whyStudyHere' || header === 'popular_subjects' || header === 'top_intakes' || header === 'intakes') {
@@ -158,8 +156,8 @@ export async function fetchSheetSafe(
   } catch (err) {
     console.error(
       `[fetchSheet] "${tabName}" failed — serving ${fallback.length} fallback row(s). ` +
-        `Check the service account still has Viewer access to the content sheet and that ` +
-        `GOOGLE_SA_EMAIL / GOOGLE_SA_PRIVATE_KEY are set in this environment.`,
+        `Check the content spreadsheet is still shared "Anyone with the link -> Viewer" ` +
+        `and that the tab name matches exactly.`,
       err,
     );
     return fallback;
