@@ -5,7 +5,7 @@
 export const CONFIG = {
   /** Shown on the results page as call-to-action buttons. */
   counsellingPhone: '+8809612916910',
-  whatsappNumber: '8801792608084',
+  whatsappNumber: '8801343493646',
   whatsappMessage: {
     en: 'Hi, I just used the destination matcher and would like to talk about my options.',
     bn: 'হ্যালো, আমি ডেস্টিনেশন ম্যাচার ব্যবহার করেছি এবং আমার অপশনগুলো নিয়ে কথা বলতে চাই।',
