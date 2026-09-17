@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Clock, CaretRight, MapPin, CurrencyDollar, BookOpen, Medal, Calendar, Briefcase, Users, CheckCircle, ChartBar, X, Sparkle, ArrowRight, BookOpenText } from '@phosphor-icons/react';
+import { Clock, CaretRight, MapPin, CurrencyDollar, BookOpen, Medal, Calendar, Briefcase, Users, CheckCircle, ChartBar, Sparkle, ArrowRight, BookOpenText } from '@phosphor-icons/react';
 import './detail.css';
 
 interface ArticleData {
@@ -275,11 +275,8 @@ export default function ArticleDetailPage({ params }: { params: Promise<{ slug: 
   const article = articlesDb[slug];
 
   const [scrollProgress, setScrollProgress] = useState(0);
-  const [showFloatingCta, setShowFloatingCta] = useState(false);
-  const [showModal, setShowModal] = useState(false);
-  const [hasTriggeredModal, setHasTriggeredModal] = useState(false);
 
-  // Scroll listener for progress bar, floating CTA, and modal trigger
+  // Scroll listener for progress bar
   useEffect(() => {
     const handleScroll = () => {
       const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
@@ -287,36 +284,11 @@ export default function ArticleDetailPage({ params }: { params: Promise<{ slug: 
 
       const scrolled = (window.scrollY / totalHeight) * 100;
       setScrollProgress(scrolled);
-
-      // Show floating CTA after 300px scroll
-      if (window.scrollY > 300) {
-        setShowFloatingCta(true);
-      } else {
-        setShowFloatingCta(false);
-      }
-
-      // Trigger modal at 40% scroll
-      if (scrolled >= 40 && !hasTriggeredModal) {
-        setShowModal(true);
-        setHasTriggeredModal(true);
-      }
     };
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [hasTriggeredModal]);
-
-  // Trigger modal after 5 seconds
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (!hasTriggeredModal) {
-        setShowModal(true);
-        setHasTriggeredModal(true);
-      }
-    }, 5000);
-
-    return () => clearTimeout(timer);
-  }, [hasTriggeredModal]);
+  }, []);
 
   if (!article) {
     return (
@@ -360,9 +332,6 @@ export default function ArticleDetailPage({ params }: { params: Promise<{ slug: 
           </div>
           <h1 className="hero-headline-custom">{article.title}</h1>
           <p className="hero-subtitle-custom">{article.hook}</p>
-          <button onClick={() => setShowModal(true)} className="hero-cta-btn">
-            Get Free Counseling
-          </button>
         </div>
       </section>
 
@@ -454,18 +423,6 @@ export default function ArticleDetailPage({ params }: { params: Promise<{ slug: 
                   )}
                 </div>
 
-                {/* 5. Mid-Content CTA Banner after section 2 */}
-                {idx === 1 && (
-                  <div className="mid-content-banner">
-                    <div className="mid-banner-text">
-                      <h3 className="mid-banner-title">Still confused? Talk to an expert — it's free.</h3>
-                      <p className="mid-banner-desc">Get your personalized university shortlist and visa checklist today.</p>
-                    </div>
-                    <button onClick={() => setShowModal(true)} className="mid-banner-btn">
-                      Book a Free Session
-                    </button>
-                  </div>
-                )}
               </React.Fragment>
             ))}
 
@@ -474,21 +431,6 @@ export default function ArticleDetailPage({ params }: { params: Promise<{ slug: 
 
           {/* Right Column: Sidebar */}
           <div className="article-sidebar-area">
-            {/* Counseling Card */}
-            <div className="sidebar-counseling-card">
-              <h3 className="sidebar-form-title">Book a Free Session</h3>
-              <p className="sidebar-form-subtitle">Get expert guidance from counselors who have sent hundreds of students abroad.</p>
-              
-              <form className="counseling-fields-form" onSubmit={(e) => e.preventDefault()}>
-                <input type="text" placeholder="Your full name" className="sidebar-input-field" required />
-                <input type="tel" placeholder="Phone number" className="sidebar-input-field" required />
-                <input type="email" placeholder="Email address (optional)" className="sidebar-input-field" />
-                <button type="submit" className="sidebar-submit-btn">Get Free Counseling</button>
-              </form>
-              
-              <p className="sidebar-form-disclaimer">Free, no obligation. We respect your privacy.</p>
-            </div>
-
             {/* Floating Tags or Subject list inside Sidebar */}
             <div className="sidebar-subjects-card">
               <h3 className="sidebar-sub-title">Popular Subjects</h3>
@@ -524,40 +466,6 @@ export default function ArticleDetailPage({ params }: { params: Promise<{ slug: 
           </div>
         </div>
       </div>
-
-      {/* 7. Sticky Floating CTA */}
-      <div className={`sticky-floating-cta ${showFloatingCta ? 'visible' : ''}`}>
-        <h4 className="floating-cta-title">Need help with your application?</h4>
-        <p className="floating-cta-desc">Get free expert guidance from counselors who have sent hundreds of students abroad.</p>
-        <button onClick={() => setShowModal(true)} className="floating-cta-btn">
-          Book a Free Session
-        </button>
-      </div>
-
-      {/* 8. Triggered Modal Popup Form */}
-      {showModal && (
-        <div className="modal-overlay">
-          <div className="modal-card">
-            <button className="modal-close-x" onClick={() => setShowModal(false)}>
-              <X size={20} />
-            </button>
-            <div className="modal-emoji-header">🎓</div>
-            <h3 className="modal-title-custom">Get Free Expert Guidance</h3>
-            <p className="modal-desc-custom">
-              Talk to a counselor who has helped 500+ students study in USA, UK, Canada, and Australia.
-            </p>
-            <form className="modal-form-fields" onSubmit={(e) => { e.preventDefault(); setShowModal(false); }}>
-              <input type="text" placeholder="Your full name" className="modal-input-field" required />
-              <input type="tel" placeholder="Phone number" className="modal-input-field" required />
-              <input type="email" placeholder="Email address (optional)" className="modal-input-field" />
-              <button type="submit" className="modal-submit-btn">Book Free Session</button>
-            </form>
-            <span className="modal-dismiss-link" onClick={() => setShowModal(false)}>
-              Maybe later
-            </span>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

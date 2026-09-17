@@ -239,37 +239,6 @@ export default async function CountryPage({ params }: { params: Promise<{ countr
 
           {/* RIGHT COLUMN - Sticky Sidebar */}
           <div className="country-sidebar-wrapper">
-            {/* Counseling Form */}
-            <div className="sidebar-counseling-card">
-              <h3 className="sidebar-form-title">Book a Free Counseling Session</h3>
-              <p className="sidebar-form-subtitle">Our expert counselors are ready to guide you.</p>
-              
-              <form className="counseling-fields-form">
-                <input 
-                  type="text" 
-                  placeholder="Your full name" 
-                  className="sidebar-input-field" 
-                  required 
-                />
-                <input 
-                  type="tel" 
-                  placeholder="Phone number" 
-                  className="sidebar-input-field" 
-                  required 
-                />
-                <input 
-                  type="email" 
-                  placeholder="Email address (optional)" 
-                  className="sidebar-input-field" 
-                />
-                <button type="button" className="sidebar-submit-btn">
-                  Get Free Counseling
-                </button>
-              </form>
-              
-              <p className="sidebar-form-disclaimer">Free, no obligation. We respect your privacy.</p>
-            </div>
-
             {/* Popular Subjects */}
             {country.popular_subjects && country.popular_subjects.length > 0 && (
               <div className="sidebar-subjects-card">
