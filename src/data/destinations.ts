@@ -386,7 +386,9 @@ export interface University {
   accommodation_per_year: number;
   living_cost_per_month: number;
   ielts_requirement: string;
-  min_gpa: number;
+  // Real-world sheet content mixes GPA scale ("3.8"), percentage scale ("75%"), and
+  // ranges ("65-70%") — kept as free text rather than coerced to a single number.
+  min_gpa: number | string;
   image?: string;
   tuitionRangeStr?: string;
   hasScholarship?: boolean;
@@ -503,7 +505,7 @@ export const universities: University[] = [
   }
 ];
 
-interface Program {
+export interface Program {
   slug: string;
   university_slug: string;
   degree_level: string;

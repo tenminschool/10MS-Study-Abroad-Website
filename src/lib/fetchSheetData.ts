@@ -42,7 +42,22 @@ const keyMappings: Record<string, string> = {
   'avatar url': 'avatar',
   'avatar': 'avatar',
   'approved?': 'approved',
-  'approved': 'approved'
+  'approved': 'approved',
+  'degree_level': 'degree_level',
+  'duration_years': 'duration_years',
+  'annual_tuition': 'annual_tuition',
+  'subjects_covered': 'subjects_covered',
+  'avg_salary_entry': 'avg_salary_entry',
+  'avg_salary_5yr': 'avg_salary_5yr',
+  'career_outcomes': 'career_outcomes',
+  'work_experience_required': 'work_experience_required',
+  'related_scholarships': 'related_scholarships',
+  'university_slug': 'university_slug',
+  'description': 'description',
+  'campus_life_notes': 'campus_life_notes',
+  'visa_requirements': 'visa_requirements',
+  'hasscholarship': 'hasScholarship',
+  'scholarship available': 'hasScholarship'
 };
 
 function cleanKey(label: string): string {
@@ -119,11 +134,28 @@ export async function fetchSheet(tabName: string) {
       const val = cell?.v ?? "";
 
       // Parse specific fields to match codebase expectations
-      if (header === 'whyStudyHere' || header === 'popular_subjects' || header === 'top_intakes' || header === 'intakes') {
+      if (
+        header === 'whyStudyHere' || header === 'popular_subjects' || header === 'top_intakes' || header === 'intakes' ||
+        header === 'subjects_covered' || header === 'career_outcomes' || header === 'related_scholarships' || header === 'visa_requirements'
+      ) {
         obj[header] = splitStringToArray(val);
-      } else if (header === 'world_ranking' || header === 'tuition_per_year' || header === 'accommodation_per_year' || header === 'living_cost_per_month' || header === 'min_gpa') {
-        const cleanVal = typeof val === 'string' ? val.replace(/[^0-9.]/g, '') : val;
-        obj[header] = cleanVal !== "" ? Number(cleanVal) : 0;
+      } else if (
+        header === 'world_ranking' || header === 'tuition_per_year' || header === 'accommodation_per_year' || header === 'living_cost_per_month' ||
+        header === 'duration_years' || header === 'annual_tuition' || header === 'avg_salary_entry' || header === 'avg_salary_5yr'
+      ) {
+        // Real-world cells for these fields are often a range ("11,000–15,000") rather than a
+        // single figure. Take the first numeric token instead of stripping-and-concatenating all
+        // digits in the cell, which previously turned "11,000–15,000" into the garbage value
+        // 1100015000.
+        if (typeof val === 'string') {
+          const match = val.match(/[\d,]+(\.\d+)?/);
+          const cleanVal = match ? match[0].replace(/,/g, '') : '';
+          obj[header] = cleanVal !== '' ? Number(cleanVal) : 0;
+        } else {
+          obj[header] = typeof val === 'number' ? val : 0;
+        }
+      } else if (header === 'work_experience_required' || header === 'hasScholarship') {
+        obj[header] = typeof val === 'string' ? val.trim().toUpperCase() === 'TRUE' : Boolean(val);
       } else {
         obj[header] = typeof val === 'string' ? val.trim() : val;
       }

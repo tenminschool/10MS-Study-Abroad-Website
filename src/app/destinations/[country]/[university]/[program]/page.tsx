@@ -1,11 +1,12 @@
 import React from 'react';
-import { programs, universities } from '../../../../../data/destinations';
+import { getDestinationsData } from '../../../../../lib/getDestinationsData';
 import Link from 'next/link';
 import { Clock, BookOpen, Briefcase, Medal, ArrowLeft } from '@phosphor-icons/react/ssr';
 import './program.css';
 
 export default async function ProgramPage({ params }: { params: Promise<{ country: string, university: string, program: string }> }) {
   const { country, university, program } = await params;
+  const { programs, universities } = await getDestinationsData();
   const prog = programs.find(p => p.slug === program && p.university_slug === university);
   const uni = universities.find(u => u.slug === university);
   

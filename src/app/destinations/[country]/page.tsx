@@ -1,5 +1,6 @@
 import React from 'react';
-import { destinations, universities } from '../../../data/destinations';
+import { destinations as staticDestinations } from '../../../data/destinations';
+import { getDestinationsData } from '../../../lib/getDestinationsData';
 import Link from 'next/link';
 import { MapPin, CurrencyDollar, BookOpen, Clock, CaretRight, GraduationCap, Medal, Calendar, Briefcase, Users, CheckCircle, ChartBar } from '@phosphor-icons/react/ssr';
 import { Flag } from '../../../components/Flag';
@@ -7,7 +8,7 @@ import './country.css';
 
 export async function generateMetadata({ params }: { params: Promise<{ country: string }> }) {
   const { country: countrySlug } = await params;
-  const country = destinations.find(d => d.slug === countrySlug);
+  const country = staticDestinations.find(d => d.slug === countrySlug);
   if (country) {
     return { title: `Study in ${country.name} | 10 Minute School Study Abroad` };
   }
@@ -16,6 +17,7 @@ export async function generateMetadata({ params }: { params: Promise<{ country: 
 
 export default async function CountryPage({ params }: { params: Promise<{ country: string }> }) {
   const { country: countrySlug } = await params;
+  const { destinations, universities } = await getDestinationsData();
   const country = destinations.find(d => d.slug === countrySlug);
 
   if (!country) {
@@ -174,7 +176,9 @@ export default async function CountryPage({ params }: { params: Promise<{ countr
                         </div>
                       </div>
                       
-                      <span className="uni-card-rank-badge">#{uni.world_ranking}</span>
+                      {uni.world_ranking > 0 && (
+                        <span className="uni-card-rank-badge">#{uni.world_ranking}</span>
+                      )}
                       <Link href={`/destinations/${country.slug}/${uni.slug}`} className="uni-card-view-link">
                         View <CaretRight size={14} />
                       </Link>
@@ -221,12 +225,18 @@ export default async function CountryPage({ params }: { params: Promise<{ countr
                 <div className="visa-badge-processing">
                   <Clock size={16} /> {country.visa_overview.processing}
                 </div>
-                <h3 className="visa-req-title">Key Requirements</h3>
-                <ul className="visa-bullets-list">
-                  {country.visa_overview.requirements.map((req, idx) => (
-                    <li key={idx} className="visa-bullet-item">{req}</li>
-                  ))}
-                </ul>
+                {country.visa_overview.requirements.length > 0 ? (
+                  <>
+                    <h3 className="visa-req-title">Key Requirements</h3>
+                    <ul className="visa-bullets-list">
+                      {country.visa_overview.requirements.map((req, idx) => (
+                        <li key={idx} className="visa-bullet-item">{req}</li>
+                      ))}
+                    </ul>
+                  </>
+                ) : (
+                  <p className="text-sm text-[var(--fg-2)] leading-relaxed mt-3">{country.visa_description}</p>
+                )}
               </div>
             ) : (
               <div className="content-section-card">

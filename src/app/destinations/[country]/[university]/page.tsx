@@ -1,11 +1,12 @@
 import React from 'react';
-import { universities, programs } from '../../../../data/destinations';
+import { getDestinationsData } from '../../../../lib/getDestinationsData';
 import Link from 'next/link';
 import { MapPin, Trophy, GraduationCap, Clock, CheckSquare } from '@phosphor-icons/react/ssr';
 import './university.css';
 
 export default async function UniversityPage({ params }: { params: Promise<{ country: string, university: string }> }) {
   const { country, university } = await params;
+  const { universities, programs } = await getDestinationsData();
   const uni = universities.find(u => u.slug === university && u.country_slug === country);
   
   if (!uni) {
@@ -34,7 +35,9 @@ export default async function UniversityPage({ params }: { params: Promise<{ cou
                 <h1 className="text-white mb-2">{uni.name}</h1>
                 <div className="flex gap-4 text-light-blue text-sm">
                   <span className="flex items-center gap-1"><MapPin size={16} /> {uni.city}, {country.toUpperCase()}</span>
-                  <span className="flex items-center gap-1"><Trophy size={16} /> World Rank: #{uni.world_ranking}</span>
+                  {uni.world_ranking > 0 && (
+                    <span className="flex items-center gap-1"><Trophy size={16} /> World Rank: #{uni.world_ranking}</span>
+                  )}
                 </div>
               </div>
             </div>
