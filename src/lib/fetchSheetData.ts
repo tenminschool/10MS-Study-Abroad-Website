@@ -58,7 +58,7 @@ function cleanKey(label: string): string {
   return snake;
 }
 
-function splitStringToArray(val: any): string[] {
+export function splitStringToArray(val: any): string[] {
   if (!val) return [];
   const str = String(val).trim();
   if (!str) return [];
@@ -90,7 +90,7 @@ export async function fetchSheet(tabName: string) {
   }
 
   // Most tabs reserve row 1 and put headers on row 2; a few have headers on row 1 instead.
-  const headerOnRow1Tabs = ['Testimonials'];
+  const headerOnRow1Tabs = ['Testimonials', 'FAQ'];
   const range = headerOnRow1Tabs.includes(tabName) ? 'A1:Z' : 'A2:Z';
   const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(queryTab)}&range=${range}&headers=1`;
 

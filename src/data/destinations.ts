@@ -344,6 +344,31 @@ export const destinations: Destination[] = [
     ],
     visa_description: "Student Visa – Processing time: 2-4 weeks. Requires a COE (Certificate of Eligibility) issued by Japanese immigration.",
     testimonials: []
+  },
+  {
+    id: "malta",
+    name: "Malta",
+    slug: "malta",
+    flag_emoji: "🇲🇹",
+    hero_image: "/images/countries/malta.jpg",
+    tuitionRange: "€6,000 – €12,000/year",
+    costOfLiving: "€8,000 – €10,000/year",
+    numUniversitiesStr: "University of Malta + international campuses",
+    workPermitStr: "Part-time work allowed during studies; job-seeker visa post-study",
+    whyStudyHere: [
+      "English is an official language, so all programs are English-taught",
+      "EU member state with a Schengen-adjacent, English-speaking base for travel across Europe",
+      "Lower tuition and living costs than the UK or mainland Western Europe",
+      "Warm Mediterranean climate and a growing tech/iGaming/finance job market"
+    ],
+    popular_subjects: ["Business", "IT", "Tourism & Hospitality"],
+    top_intakes: ["September", "February"],
+    scholarships_list: [
+      { name: "University of Malta International Scholarships", amount: "Partial tuition waiver", desc: "Merit-based, for international students" },
+      { name: "Malta government/EU exchange grants", amount: "Varies", desc: "Available for select EU-linked programs" }
+    ],
+    visa_description: "Malta Student Visa/Residence Permit – Processing time: 4-8 weeks. Requires university acceptance letter, proof of funds, and health insurance.",
+    testimonials: []
   }
 ];
 

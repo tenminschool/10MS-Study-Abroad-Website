@@ -57,6 +57,59 @@
   border-color: rgba(15, 122, 87, 0.2);
 }
 
+/* -------------------------------------------------------------------------- */
+/* FAQ (video)                                                                */
+/* -------------------------------------------------------------------------- */
+.faq-section {
+  padding: 72px 0;
+  background-color: var(--surface-subtle);
+}
+
+.faq-header {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.faq-header h2 {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: var(--fg-1);
+  margin-bottom: 8px;
+}
+
+.faq-subtitle {
+  font-size: 1.05rem;
+  color: var(--fg-2);
+}
+
+.faq-video-card {
+  background: var(--surface-card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-xl);
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  transition: var(--transition-smooth);
+}
+
+.faq-video-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.05);
+  border-color: rgba(15, 122, 87, 0.2);
+}
+
+.faq-video-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--fg-1);
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+}
+
 .test-card-top-row {
   display: flex;
   align-items: center;
@@ -477,10 +530,6 @@
   font-size: 0.95rem;
 }
 
-.country-card-detail-item:last-of-type {
-  margin-bottom: 24px;
-}
-
 .country-card-detail-item svg {
   color: var(--ten-red-soft);
   margin-top: 3px;
@@ -591,7 +640,12 @@
   }
 
   .stories-header h2,
+  .faq-header h2,
   .final-cta-band-title {
     font-size: 1.8rem;
+  }
+
+  .faq-section {
+    padding: 56px 0;
   }
 }

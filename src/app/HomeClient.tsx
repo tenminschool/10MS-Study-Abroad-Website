@@ -10,13 +10,16 @@ import { Flag } from '../components/Flag';
 import { TestimonialAvatar } from '../components/TestimonialAvatar';
 import { YouTubeFacade } from '../components/YouTubeFacade';
 import type { Testimonial, TextTestimonial } from '../lib/testimonials';
+import type { CountryCardData } from '../lib/countryCards';
+import type { FaqVideo } from '../lib/faqs';
 import './page.css';
 
 interface CountrySectionProps {
   lang: string;
+  countries: CountryCardData[];
 }
 
-function CountrySection({ lang }: CountrySectionProps) {
+function CountrySection({ lang, countries }: CountrySectionProps) {
   const t = {
     bn: {
       mapHeading: "একটাই পথ, ",
@@ -43,7 +46,7 @@ function CountrySection({ lang }: CountrySectionProps) {
           <p className="bn">{currentTranslations.mapSubheading}</p>
         </div>
 
-        <CountryCarousel lang={lang} />
+        <CountryCarousel lang={lang} countries={countries} />
       </div>
     </section>
   );
@@ -193,7 +196,7 @@ function TestimonialQuoteModal({
   );
 }
 
-function TestimonialsSection({ lang, testimonials }: CountrySectionProps & { testimonials: Testimonial[] }) {
+function TestimonialsSection({ lang, testimonials }: { lang: string; testimonials: Testimonial[] }) {
   const t = {
     bn: {
       heading: "শিক্ষার্থীদের অভিজ্ঞতা",
@@ -259,7 +262,71 @@ function TestimonialsSection({ lang, testimonials }: CountrySectionProps & { tes
   );
 }
 
-function FinalCTABand({ lang }: CountrySectionProps) {
+function FaqCard({
+  faq,
+  tabIndex,
+  ariaHidden,
+}: {
+  faq: FaqVideo;
+  tabIndex: number;
+  ariaHidden: boolean;
+}) {
+  return (
+    <div className="faq-video-card" tabIndex={tabIndex} aria-hidden={ariaHidden || undefined}>
+      <YouTubeFacade videoId={faq.videoId} title={faq.title} />
+      <h3 className="faq-video-title bn">{faq.title}</h3>
+    </div>
+  );
+}
+
+function FaqSection({ lang, faqs }: { lang: string; faqs: FaqVideo[] }) {
+  const t = {
+    bn: {
+      heading: "সাধারণ জিজ্ঞাসা",
+      subheading: "শিক্ষার্থীদের সবচেয়ে বেশি জিজ্ঞাসিত প্রশ্নের উত্তর",
+      prev: "আগের প্রশ্ন",
+      next: "পরের প্রশ্ন",
+      ariaLabel: "সাধারণ জিজ্ঞাসার ভিডিও ক্যারোসেল",
+    },
+    en: {
+      heading: "Frequently Asked Questions",
+      subheading: "Quick answers to the questions students ask us most",
+      prev: "Previous question",
+      next: "Next question",
+      ariaLabel: "FAQ video carousel",
+    }
+  };
+
+  const currentTranslations = lang === 'bn' ? t.bn : t.en;
+
+  if (faqs.length === 0) {
+    return null;
+  }
+
+  return (
+    <section className="faq-section">
+      <div className="container">
+        <div className="faq-header">
+          <h2 className="bn">{currentTranslations.heading}</h2>
+          <p className="faq-subtitle bn">{currentTranslations.subheading}</p>
+        </div>
+
+        <Carousel
+          items={faqs}
+          getKey={(_, i) => String(i)}
+          renderItem={(faq, meta) => (
+            <FaqCard faq={faq} tabIndex={meta.tabIndex} ariaHidden={meta.ariaHidden} />
+          )}
+          ariaLabel={currentTranslations.ariaLabel}
+          prevLabel={currentTranslations.prev}
+          nextLabel={currentTranslations.next}
+        />
+      </div>
+    </section>
+  );
+}
+
+function FinalCTABand({ lang }: { lang: string }) {
   const t = {
     bn: {
       title: "এখনো বুঝতে পারছো না কোথা থেকে শুরু করবে?",
@@ -289,9 +356,11 @@ function FinalCTABand({ lang }: CountrySectionProps) {
 
 interface HomeClientProps {
   testimonials: Testimonial[];
+  countries: CountryCardData[];
+  faqs: FaqVideo[];
 }
 
-export default function HomeClient({ testimonials }: HomeClientProps) {
+export default function HomeClient({ testimonials, countries, faqs }: HomeClientProps) {
   const [lang, setLang] = useState('en');
 
   // Initialize lang from localStorage and listen to language toggles
@@ -317,10 +386,13 @@ export default function HomeClient({ testimonials }: HomeClientProps) {
 
       {/* "একটাই পথ, একাধিক গন্তব্য" — country carousel section (map illustration
           replaced by a horizontally scrolling carousel of country cards). */}
-      <CountrySection lang={lang} />
+      <CountrySection lang={lang} countries={countries} />
 
       {/* Success stories — approved testimonials from the Google Sheet */}
       <TestimonialsSection lang={lang} testimonials={testimonials} />
+
+      {/* FAQ — approved video answers from the Google Sheet's FAQ tab */}
+      <FaqSection lang={lang} faqs={faqs} />
 
       {/* Final CTA band — brand red background */}
       <FinalCTABand lang={lang} />
